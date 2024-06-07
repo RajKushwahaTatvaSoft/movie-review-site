@@ -1,0 +1,55 @@
+<div
+  class="rounded position-relative fruite-item bg-white"
+  (click)="goToMovieDetail(movieDetail.movieId)"
+>
+  <div class="fruite-img border border-secondary border-bottom-0">
+    <img
+      src="{{ movieDetail.posterUrl }}"
+      class="img-fluid w-100 rounded-top"
+      alt="no image"
+      style="object-fit: contain; background-color: #eaeaea"
+      (error)="
+        movieDetail.posterUrl =
+          'http://localhost:4200/assets/not_found_movie.svg'
+      "
+    />
+  </div>
+
+  <!-- <div
+    class=" px-2 py-1 rounded d-flex align-items-center position-absolute"
+    style="top: 10px; left: 10px;background-color: #c8c8c8;"
+  >
+    {{ movieDetail.rottenTomato }} <img height="20px" class="ms-1" src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Rotten_Tomatoes.svg" alt="">
+  </div> -->
+
+  <div class="py-3 px-2 border border-secondary border-top-0 rounded-bottom">
+    <div class="d-flex align-items-center justify-content-between">
+      <p
+        class="h6"
+        style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
+      >
+        {{ movieDetail.title }}
+      </p>
+      <p class="h6" *ngIf="movieDetail.duration != null">
+        {{ movieDetail.duration }} mins
+      </p>
+    </div>
+
+    <ng-template #starTemplate let-fill="fill">
+      <i class="bi-star-fill">
+        @if (fill > 0) {
+        <i class="bi-star-fill filled" [style.width.%]="fill"></i>
+        }
+      </i>
+    </ng-template>
+    <div class="" style="width: 100px">
+      <ngb-rating
+        [(rate)]="ratingOutOfStar"
+        [starTemplate]="starTemplate"
+        [readonly]="true"
+        [max]="5"
+        [ariaValueText]="ariaValueText"
+      />
+    </div>
+  </div>
+</div>

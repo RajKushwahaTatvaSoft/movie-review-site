@@ -1,0 +1,28 @@
+<!--
+  Design based on Lucas Swierad Login screen for Bondroy at this link:
+https://dribbble.com/shots/20525897-Login-screen
+-->
+<div class="container d-flex justify-content-center">
+
+    <section class="card center">
+        <div class="center flex">
+            <img class="logo" src="https://www.logoai.com/uploads/output/2021/11/21/ef730a9a1802db91e6ac69d28f51f3c4.jpg" alt="logo">
+        </div>
+
+        <form [formGroup]="userform" (ngSubmit)="onSignUp()">
+            <section class="form">
+                <input class="center flex roboto-thin" name="firstName" formControlName="firstName" type="text" id="firstName" placeholder="First Name">
+                <input class="center flex roboto-thin" name="lastName" formControlName="lastName" type="text" id="lastName" placeholder="Last Name">
+                <input class="center flex roboto-thin" name="email" formControlName="email" type="email" id="email" placeholder="E-mail address or phone number">
+                <input class="center flex roboto-thin" name="password" formControlName="password" type="text" id="password" placeholder="Password">
+            </section>
+
+            <section class="buttons">
+                <button class="center w-100 btn btn-outline-danger my-2" type="submit">Sign Up</button>                
+            </section>
+            
+        </form>
+
+    </section>
+
+</div>

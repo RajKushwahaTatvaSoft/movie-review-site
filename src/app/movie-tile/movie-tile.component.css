@@ -1,0 +1,39 @@
+
+ .fruite-item {
+    transition: 0.5s;
+}
+ .fruite-item:hover {
+    box-shadow: 0 0 55px rgba(0, 0, 0, 0.4);
+}
+
+ .fruite-item .fruite-img {
+    overflow: hidden;
+    transition: 0.5s;
+    border-radius: 10px 10px 0 0;
+}
+
+ .fruite-item .fruite-img img {    
+    height: 200px;
+    object-fit: cover;
+    transition: 0.5s;
+}
+
+ .fruite-item .fruite-img img:hover {
+    transform: scale(1.3);
+}
+
+i {
+    position: relative;
+    display: inline-block;
+    font-size: 1.3rem;
+    padding-right: 0.1rem;
+    color: #d3d3d3;
+}
+
+.filled {
+    color: red;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

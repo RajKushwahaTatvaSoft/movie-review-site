@@ -1,0 +1,18 @@
+<ng-template #starTemplate let-fill="fill">
+  <i class="bi-star-fill">
+    @if (fill > 0) {
+    <i class="bi-star-fill filled" [style.width.%]="fill"></i>
+    }
+  </i>
+</ng-template>
+
+<div class="card" style="height: 200px;">
+  <h5>{{userName}}</h5>
+  <ngb-rating
+    [(rate)]="rating"
+    [starTemplate]="starTemplate"
+    [readonly]="true"
+    [max]="10"
+  />
+  <p style="text-overflow: ellipsis; overflow: hidden;">{{desc}}</p>
+</div>

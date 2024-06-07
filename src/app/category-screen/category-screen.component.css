@@ -1,0 +1,21 @@
+.active-category{
+    background-color: blueviolet;
+    color: white;
+}
+
+.category-btn:hover{
+    background-color: #ddd;
+}
+
+.active-category:hover{
+    background-color: purple;
+}
+
+.category-btn{
+    padding: 5px;
+    padding-left: 12px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s;
+}
+

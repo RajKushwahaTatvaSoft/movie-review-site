@@ -1,0 +1,91 @@
+<div class="pagination">
+  <button
+    (click)="changePage(currentPage - 1)"
+    class="page-item mx-1 border-0"
+    [disabled]="hasPreviousPage === false"
+  >
+    ❮
+  </button>
+
+  <ng-container
+    *ngIf="
+      buttonToRenderPrevious <= buttonNextToCurrent + 1;
+      else previousButtonsElse
+    "
+  >
+    <button
+      class="page-item mx-1 border-0"
+      *ngFor="let pageNum of counter(currentPage - 1); let ind = index"
+      (click)="changePage(ind + 1)"
+    >
+      {{ ind + 1 }}
+    </button>
+  </ng-container>
+
+  <ng-template #previousButtonsElse>
+    <button
+      (click)="changePage(1)"
+      *ngIf="hasPreviousPage"
+      class="page-item mx-1 border-0"
+    >
+      1
+    </button>
+
+    <button
+      *ngIf="buttonToRenderPrevious > buttonNextToCurrent + 1"
+      class="page-item mx-1 border-0"
+    >
+      ...
+    </button>
+
+    <button
+      class="page-item mx-1 border-0"
+      *ngFor="let pageNum of counter(buttonNextToCurrent); let ind = index"
+      (click)="changePage(currentPage - buttonNextToCurrent + ind)"
+    >
+      {{ currentPage - buttonNextToCurrent + ind }}
+    </button>
+  </ng-template>
+
+  <button class="page-item mx-1 active border-0">{{ currentPage }}</button>
+
+  <ng-container
+    *ngIf="buttonToRenderNext <= buttonNextToCurrent + 1; else nextButtonsElse"
+  >
+    <button
+      class="page-item mx-1 border-0"
+      *ngFor="let pageNum of counter(totalPages - currentPage); let ind = index"
+      (click)="changePage(currentPage + ind + 1)"
+    >
+      {{ currentPage + ind + 1 }}
+    </button>
+  </ng-container>
+
+  <ng-template #nextButtonsElse>
+    <button
+      class="page-item mx-1 border-0"
+      *ngFor="let pageNum of counter(buttonNextToCurrent); let ind = index"
+      (click)="changePage(currentPage + ind + 1)"
+    >
+      {{ currentPage + ind + 1 }}
+    </button>
+
+    <button class="page-item mx-1 border-0">...</button>
+
+    <button
+      (click)="changePage(totalPages)"
+      class="page-item mx-1 border-0"
+      [disabled]="currentPage === totalPages"
+    >
+      {{ totalPages }}
+    </button>
+  </ng-template>
+
+  <button
+    (click)="changePage(currentPage + 1)"
+    [disabled]="hasNextPage === false"
+    class="page-item mx-1 border-0"
+  >
+    ❯
+  </button>
+</div>

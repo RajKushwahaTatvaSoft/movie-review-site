@@ -1,0 +1,41 @@
+<!--
+  Design based on Lucas Swierad Login screen for Bondroy at this link:
+https://dribbble.com/shots/20525897-Login-screen
+-->
+<div class="container d-flex justify-content-center">
+
+    <section class="card center">
+        <div class="center flex">
+            <img class="logo" src="https://www.logoai.com/uploads/output/2021/11/21/ef730a9a1802db91e6ac69d28f51f3c4.jpg" alt="logo">
+        </div>
+
+        <form [formGroup]="userform" method="post" (ngSubmit)="onLogin()">
+            <section class="form">
+                <input class="center flex roboto-thin" name="userName" formControlName="userName" type="email" id="email" placeholder="E-mail address or phone number">
+                <input class="center flex roboto-thin" type="password" name="password" formControlName="password" id="password" placeholder="Password">
+                <!-- <div class="space-between">
+                    <div class="center flex">
+                        <input type="checkbox" name="rememberMe" id="rememberMe">
+                        <label class="text-size-10 roboto-thin" for="rememberMe">Remember me</label>
+                    </div>
+                    <div class="center flex">
+                        <a class="link text-size-10 roboto-thin" href="">
+                            <span>Forgot password?</span>
+                        </a>
+                    </div>
+                </div> -->
+            </section>
+
+            <section class="buttons">
+                <button class="center w-100 btn btn-info text-white" type="submit" >Sign in</button>
+                <button class="center w-100 btn btn-outline-danger my-2" type="button" (click)="onRegister()">Register</button>                
+            </section>
+<!-- 
+            <section class="not-member center flex">
+                <span class="text-size-10 roboto-thin"> Not a member yet? <a class="link" href="">Sign up</a></span>
+            </section> -->
+        </form>
+
+    </section>
+
+</div>

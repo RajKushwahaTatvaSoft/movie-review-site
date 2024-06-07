@@ -1,0 +1,33 @@
+<div class="container-fluid" style="background-color: #f2f2f2">
+  <div class="row">
+    <div
+      class="col-md-1 d-flex flex-column align-items-center mt-2"
+      style="overflow-y: auto"
+    > 
+      <div *ngFor="let genre of genreList" class="col-md-2 w-100">
+        <div (click)="goToCategoryPage(genre.genreName)" [ngClass]="{'active-category': genre.genreName.toLowerCase() == categoryName.toLowerCase(), 'category-btn':true}">
+          {{ genre.genreName }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-11" style="overflow: hidden">
+
+      <div class="row mx-2">
+        <div *ngFor="let movie of moviesList" class="col-md-2 mb-3">
+          <app-movie-tile [movieDetail]="movie"></app-movie-tile>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <app-pagination-button
+          [currentPage]="currentPageNumber"
+          [itemsPerPage]="categoryPageSize"
+          [totalItems]="totalItems"
+          (pageChanged)="onPageChange($event)"
+        ></app-pagination-button>
+      </div>
+
+    </div>
+  </div>
+</div>
