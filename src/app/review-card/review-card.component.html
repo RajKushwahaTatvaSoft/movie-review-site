@@ -6,13 +6,21 @@
   </i>
 </ng-template>
 
-<div class="card" style="height: 200px;">
-  <h5>{{userName}}</h5>
+<div class="card" style="height: 100px;">
+  <div class="d-flex justify-content-between">
+    <h5>{{userRating.userName}}</h5>
+    @if(userRating.isModified){
+      <span>Edited on {{userRating.reviewDate}}</span>
+    }
+    @else {
+      <span>On {{userRating.reviewDate}}</span>
+    }
+  </div>
   <ngb-rating
-    [(rate)]="rating"
+    [(rate)]="userRating.rating"
     [starTemplate]="starTemplate"
     [readonly]="true"
     [max]="10"
   />
-  <p style="text-overflow: ellipsis; overflow: hidden;">{{desc}}</p>
+  <p style="text-overflow: ellipsis; overflow: hidden;">{{userRating.description}}</p>
 </div>

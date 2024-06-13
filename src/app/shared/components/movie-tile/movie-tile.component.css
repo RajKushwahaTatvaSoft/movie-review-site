@@ -1,9 +1,11 @@
 
  .fruite-item {
     transition: 0.5s;
+    box-shadow: 0 0 10px 7px rgba(191, 191, 191, 0.4);
+
 }
  .fruite-item:hover {
-    box-shadow: 0 0 55px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 20px 7px rgba(31, 31, 31, 0.4);
 }
 
  .fruite-item .fruite-img {

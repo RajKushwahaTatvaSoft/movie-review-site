@@ -1,0 +1,16 @@
+<div class="d-flex justify-content-between m-2">
+    <h4>Trending</h4>
+    <button class="btn btn-purple">
+      View All
+    </button>
+  </div>
+
+  <div class="row mx-2">
+    <div *ngIf="trendingMovies.length == 0">
+      <app-shimmer-list [itemCount]="6"></app-shimmer-list>
+    </div>
+
+    <div *ngFor="let movie of trendingMovies" class="col-md-2 mb-3">
+      <app-movie-tile [movieDetail]="movie" [isAdmin]="true"></app-movie-tile>
+    </div>
+  </div>

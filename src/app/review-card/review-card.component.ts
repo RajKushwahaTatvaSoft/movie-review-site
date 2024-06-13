@@ -1,5 +1,7 @@
-import { Component, Input, input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
+import { Rating } from '../shared/models/rating.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-review-card',
@@ -9,7 +11,5 @@ import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './review-card.component.css',
 })
 export class ReviewCardComponent {
-  @Input() userName = '';
-  @Input() rating = 0;
-  @Input() desc?: string;
+  @Input() userRating : Rating = new Rating('','',0,'',false);
 }

@@ -1,43 +1,48 @@
-import { Component, OnInit } from '@angular/core';
-import { PaginationButtonComponent } from '../pagination-button/pagination-button.component';
+import { Component, Inject, OnInit } from '@angular/core';
+import { PaginationButtonComponent } from '../shared/components/pagination-button/pagination-button.component';
 import { ActivatedRoute } from '@angular/router';
-import { MovieService } from '../services/movie.service';
-import { MovieTileComponent } from '../movie-tile/movie-tile.component';
+import { MovieService } from '../core/services/movie.service';
+import { MovieTileComponent } from '../shared/components/movie-tile/movie-tile.component';
 import { CommonModule } from '@angular/common';
+import { ShimmerListComponent } from '../shimmer-list/shimmer-list.component';
 
 @Component({
   selector: 'app-search-screen',
   standalone: true,
-  imports: [PaginationButtonComponent, MovieTileComponent, CommonModule],
+  imports: [
+    PaginationButtonComponent,
+    MovieTileComponent,
+    CommonModule,
+    ShimmerListComponent,
+  ],
   templateUrl: './search-screen.component.html',
   styleUrl: './search-screen.component.css',
 })
 export class SearchScreenComponent implements OnInit {
   movieName: string = '';
+  isLoading = true;
   currentPageNumber: number = 1;
   categoryPageSize: number = 12;
   totalItems: number = 12;
   moviesList: any = [];
 
   constructor(
-    private route: ActivatedRoute,
+    @Inject(ActivatedRoute) private route: ActivatedRoute,
     private movieService: MovieService
   ) {}
 
   ngOnInit(): void {
-    this.movieName = (this.route.snapshot.params['movieName']);
 
     this.route.params.subscribe((val) => {
-      this.movieName = val['movieName'].replaceAll('-',' ');
+      this.movieName = val['movieName'].replaceAll('-', ' ');
       console.log(this.movieName);
       this.fetchMovieList();
     });
 
-    this.fetchMovieList();
   }
 
   fetchMovieList() {
-
+    this.isLoading = true;
     this.movieService
       .fetchMovieByName(
         this.movieName,
@@ -45,7 +50,7 @@ export class SearchScreenComponent implements OnInit {
         this.categoryPageSize
       )
       .subscribe((response: any) => {
-        debugger;
+        this.isLoading = false;
         this.moviesList = response.data;
         this.totalItems = response.totalCount;
         this.currentPageNumber = response.currentPage;
@@ -53,6 +58,7 @@ export class SearchScreenComponent implements OnInit {
   }
 
   onPageChange(page: number): void {
+    this.isLoading = true;
     debugger;
     this.currentPageNumber = page;
     this.fetchMovieList();

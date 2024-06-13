@@ -1,0 +1,21 @@
+.feature-btn {
+  padding: 5px;
+  padding-left: 12px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  transition: background-color 0.3s;
+  background-color: #dfdfdf;
+}
+
+.active-feature{
+    background-color: blueviolet;
+    color: white;
+}
+
+.feature-btn:hover{
+    background-color: #c9c9c9;
+}
+
+.active-feature:hover{
+    background-color: purple;
+}

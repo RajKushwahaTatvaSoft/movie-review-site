@@ -1,43 +1,58 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MovieService } from '../services/movie.service';
-import { Movie } from '../shared/movie.model';
+import { Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MovieService } from '../core/services/movie.service';
+import { Movie } from '../shared/models/movie.model';
 import { CommonModule } from '@angular/common';
 import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule, MinValidator } from '@angular/forms';
 import { ReviewCardComponent } from '../review-card/review-card.component';
-import { PaginationButtonComponent } from '../pagination-button/pagination-button.component';
+import { PaginationButtonComponent } from '../shared/components/pagination-button/pagination-button.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-movie-detail',
   standalone: true,
-  imports: [NgbRatingModule, FormsModule, ReviewCardComponent, CommonModule,PaginationButtonComponent],
+  imports: [
+    NgbRatingModule,
+    ReviewCardComponent,
+    CommonModule,
+    PaginationButtonComponent,
+    FormsModule,
+  ],
   templateUrl: './movie-detail.component.html',
   styleUrl: './movie-detail.component.css',
 })
 export class MovieDetailComponent implements OnInit {
   id = 0;
-  movieDetail: Movie = new Movie(0,'',0,0,0,0,'',0);
+  movieDetail: Movie = new Movie(0, '', 0, 0, 0, 0, '', 0);
   reviewsList: any[] = [];
   reviewDesc = '';
   reviewRating = 0;
-  userId = 0;
-  
+
   currentPageNumber: number = 1;
   reviewPageSize: number = 1;
-  totalItems :number = 1;
+  totalItems: number = 1;
 
   constructor(
-    private route: ActivatedRoute,
+    @Inject(ActivatedRoute) private route: ActivatedRoute,
+    @Inject(Router) private router : Router,
     private movieService: MovieService
   ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
 
-    this.fetchData();
+    this.route.params.subscribe((data)=> {
+      this.id = this.route.snapshot.params['id'];
+      this.fetchData();
+    });
 
-    this.userId = parseInt(localStorage.getItem('userId') || '');
+  }
+
+  getNumberFormat(num: number) {
+    return Intl.NumberFormat("en-US",{notation: "compact"}).format(num);
+  }
+
+  goToCategoryPage(category:string){
+    this.router.navigate(['category',category]);
   }
 
   getFullName(user: any): string {
@@ -48,9 +63,8 @@ export class MovieDetailComponent implements OnInit {
     return this.movieDetail.rating / 2;
   }
 
-  getHourlyTime(duration:number){
-
-    var hours = Math.floor(duration / 60);          
+  getHourlyTime(duration: number) {
+    var hours = Math.floor(duration / 60);
     var minutes = duration % 60;
 
     return `${hours}h ${minutes}m`;
@@ -58,9 +72,10 @@ export class MovieDetailComponent implements OnInit {
 
   fetchMovieReviews() {
     this.movieService
-      .fetchMovieReviews(this.movieDetail.movieId,this.currentPageNumber)
+      .fetchMovieReviews(this.movieDetail.movieId, this.currentPageNumber)
       .subscribe((data: any) => {
         if (data.isSuccess == true) {
+          debugger; 
           this.reviewsList = data.result.data;
           this.currentPageNumber = data.result.currentPage;
           this.reviewPageSize = data.result.pageSize;
@@ -79,13 +94,11 @@ export class MovieDetailComponent implements OnInit {
   submitReview() {
     console.log(this.reviewDesc);
     console.log(this.reviewRating);
-    console.log(this.userId);
     console.log(this.movieDetail.movieId);
 
     this.movieService
       .addMovieReview(
         this.movieDetail.movieId,
-        this.userId,
         this.reviewRating,
         this.reviewDesc
       )
@@ -94,7 +107,6 @@ export class MovieDetailComponent implements OnInit {
       });
   }
 
-  
   onPageChange(page: number): void {
     debugger;
     this.currentPageNumber = page;

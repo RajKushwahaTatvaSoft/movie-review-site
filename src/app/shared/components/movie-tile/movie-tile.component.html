@@ -8,10 +8,7 @@
       class="img-fluid w-100 rounded-top"
       alt="no image"
       style="object-fit: contain; background-color: #eaeaea"
-      (error)="
-        movieDetail.posterUrl =
-          'http://localhost:4200/assets/not_found_movie.svg'
-      "
+      (error)="onImageError(movieDetail.imdbId || '')"
     />
   </div>
 
@@ -35,6 +32,21 @@
       </p>
     </div>
 
+    @if(isAdmin){
+    <div class="d-flex justify-content-between">
+      <button
+        class="btn btn-purple-fill"
+        (click)="goToMovieEdit(movieDetail.movieId)"
+      >
+        Edit
+        <i style="color: currentColor" class="bi bi-pencil-fill fs-6 ms-1"></i>
+      </button>
+      <button class="btn btn-danger" (click)="openDeleteModal('content',movieDetail.movieId,$event)">
+        Delete <i class="bi bi-trash3-fill fs-6 ms-1"></i>
+      </button>
+    </div>
+    } @else {
+
     <ng-template #starTemplate let-fill="fill">
       <i class="bi-star-fill">
         @if (fill > 0) {
@@ -42,7 +54,7 @@
         }
       </i>
     </ng-template>
-    <div class="" style="width: 100px">
+    <div class="d-flex align-items-center" style="width: 100px">
       <ngb-rating
         [(rate)]="ratingOutOfStar"
         [starTemplate]="starTemplate"
@@ -50,6 +62,38 @@
         [max]="5"
         [ariaValueText]="ariaValueText"
       />
+      <span class="ms-2">({{ movieDetail.ratingCount }})</span>
     </div>
+
+    }
   </div>
 </div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure to delete this?</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="d('Cross click')"
+    >
+      Cancel
+    </button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('yes')">
+      Yes
+    </button>
+  </div>
+</ng-template>

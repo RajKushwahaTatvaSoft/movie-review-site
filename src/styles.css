@@ -1,4 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
-input.form-control :focus{
+input:focus {
     box-shadow: none !important;
+}
+
+select:focus{
+    box-shadow: none !important;
+}
+
+textarea:focus{
+    box-shadow: none !important;
+}
+
+.btn-purple{
+    border-color: blueviolet;
+    color: blueviolet;
+}
+
+
+.btn-purple:hover{
+    background-color: blueviolet;
+    color: white;
+}
+
+
+.btn-purple-fill{
+    color: white;
+    background-color: blueviolet;
+}
+
+.btn-purple-fill:hover{
+    color: white;
+    background-color: purple;
 }

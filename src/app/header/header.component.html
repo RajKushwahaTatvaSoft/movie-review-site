@@ -1,36 +1,104 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a routerLink="/home" class="navbar-brand" >Movie Info</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarScroll">
-        <ul class="navbar-nav my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/home">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/category/">Categories</a>
-          </li>
-        </ul>
-        <form class="d-flex">
-          <!-- <mat-autocomplete #auto="matAutocomplete">
+  <div class="container-fluid">
+    <a routerLink="/home" class="navbar-brand">Movie Info</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarScroll"
+      aria-controls="navbarScroll"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul
+        class="navbar-nav my-2 my-lg-0 navbar-nav-scroll"
+        style="--bs-scroll-height: 100px"
+      >
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            routerLink="/home"
+            (click)="movieSearchName = ''"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            routerLink="/category/"
+            (click)="movieSearchName = ''"
+            >Categories</a
+          >
+        </li>
+      </ul>
+      <form class="d-flex">
+        <!-- <mat-autocomplete #auto="matAutocomplete">
             @for (option of options; track option) {
               <mat-option [value]="option">{{option}}</mat-option>
             }
           </mat-autocomplete> -->
-          <input class="form-control me-2" #searchText type="text" (keyup)="updateSearch(searchText.value)" placeholder="Search">
-          <button class="btn btn-outline-success" (click)="searchMovieByName()">Search</button>
-        </form>
-        <div class="ms-auto me-2">
-          <div class="btn">
-            <img width="30px" src="http://localhost:4200/assets/user_default_icon.svg" alt="not found profile">
-            <span class="ms-2">{{userName}}</span>
-          </div>
-        </div>
-        <div>
-          <button class="btn btn-outline-danger" (click)="logoutUser()">Logout</button>
+        <input
+          class="form-control me-2"
+          #searchText
+          type="text"
+          name="movieSearchName"
+          [(ngModel)]="movieSearchName"
+          autocomplete="off"
+          (input)="fetchSuggestions($event)"
+          placeholder="Search"
+          (focus)="fetchSuggestions($event)"
+          (blur)="isShowSearchResults = false"
+        />
+        <button class="btn btn-purple" (click)="searchMovieByName()">
+          Search
+        </button>
+      </form>
+
+      <div class="ms-auto">
+        <div class="btn">
+          <img
+            width="30px"
+            src="http://localhost:4200/assets/user_default_icon.svg"
+            alt="not found profile"
+          />
+          <span class="ms-2">{{ userName }}</span>
         </div>
       </div>
+      <div>
+        <button class="ms-2 btn btn-warning" *ngIf="isAdmin" (click)="goToAddMovie()">
+          Add Movie
+        </button>
+      </div>
+      <div class="mx-2">
+        <button class="btn btn-outline-danger" (click)="logoutUser()">
+          Logout
+        </button>
+      </div>
     </div>
-  </nav>
+  </div>
+</nav>
+
+@if(isShowSearchResults){
+
+<div style="position: relative" class="bg-white">
+  <div
+    style="position: absolute; width: 300px; left: 250px; z-index: 100"
+    class="bg-white shadow rounded overflow-hidden mx-2 my-1"
+  >
+    <div
+      class="p-2 d-flex justify-content-between search-item"
+      *ngFor="let movie of movieSearchList"
+      (click)="goDirectToMovie(movie.movieId, movie.title)"
+    >
+      <span> {{ movie.title }}</span>
+      <i class="bi bi-box-arrow-up-right"></i>
+    </div>
+  </div>
+</div>
+
+}

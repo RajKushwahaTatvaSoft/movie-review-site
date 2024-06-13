@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, Injectable, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MovieService } from '../services/movie.service';
-import { MovieTileComponent } from '../movie-tile/movie-tile.component';
+import { MovieService } from '../../core/services/movie.service';
+import { MovieTileComponent } from '../../shared/components/movie-tile/movie-tile.component';
 import { CommonModule } from '@angular/common';
-import { PaginationButtonComponent } from '../pagination-button/pagination-button.component';
-import { Genre } from '../shared/genre.model';
-import { Movie } from '../shared/movie.model';
+import { PaginationButtonComponent } from '../../shared/components/pagination-button/pagination-button.component';
+import { Genre } from '../../shared/models/genre.model';
+import { Movie } from '../../shared/models/movie.model';
+import { ShimmerListComponent } from '../../shimmer-list/shimmer-list.component';
+
 
 @Component({
   selector: 'app-category-screen',
   standalone: true,
-  imports: [MovieTileComponent, CommonModule, PaginationButtonComponent],
+  imports: [CommonModule, PaginationButtonComponent,MovieTileComponent,ShimmerListComponent],
   templateUrl: './category-screen.component.html',
   styleUrl: './category-screen.component.css',
 })
@@ -21,33 +23,42 @@ export class CategoryScreenComponent implements OnInit {
   totalItems: number = 100;
   genreList: Genre[] = [];
   moviesList: Movie[] = [];
+  isLoading = true;
 
   constructor(
-    private route: ActivatedRoute,
+    @Inject(ActivatedRoute) private route: ActivatedRoute,
     private movieService: MovieService,
-    private router: Router
+    @Inject(Router) private router: Router,
   ) {}
 
-  ngOnInit(): void {
-    debugger;
-    this.categoryName = this.route.snapshot.params['categoryName'];
+  
+  printListToConsole() {
+    MovieTileComponent.problemImagesMovieId.forEach((value, index) => {
+      console.log(value);
+    });
 
+    this.movieService.updateMovieDataFromOmdb();
+  }
+
+  ngOnInit(): void {
+ 
+    this.fetchGenreList();
+
+    this.route.params.subscribe((val) => {
+      this.categoryName = val['categoryName'].toLowerCase().replaceAll('-',' ');
+      
     if(!this.categoryName){
       this.categoryName = 'Trending'
     }
 
-    this.fetchGenreList();
-
-    this.route.params.subscribe((val) => {
-      this.categoryName = val['categoryName'].toLowerCase();
       console.log(this.categoryName);
       this.fetchMovieList();
     });
 
-    this.fetchMovieList();
   }
 
   fetchMovieList() {
+    this.isLoading = true;
     this.movieService
       .fetchMovieByCategory(
         this.categoryName,
@@ -59,6 +70,7 @@ export class CategoryScreenComponent implements OnInit {
         this.moviesList = response.data;
         this.totalItems = response.totalCount;
         this.currentPageNumber = response.currentPage;
+        this.isLoading = false;
       });
   }
 
@@ -71,11 +83,12 @@ export class CategoryScreenComponent implements OnInit {
   }
 
   goToCategoryPage(categoryName: string) {
-    this.router.navigate(['category', categoryName.toLowerCase()]);
+    this.router.navigate(['category', categoryName.toLowerCase().replaceAll(' ','-')]);
   }
 
   onPageChange(page: number): void {
     debugger;
+    this.isLoading = true;
     this.currentPageNumber = page;
     this.fetchMovieList();
   }
