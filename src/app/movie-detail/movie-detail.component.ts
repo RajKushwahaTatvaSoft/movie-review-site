@@ -7,6 +7,8 @@ import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReviewCardComponent } from '../review-card/review-card.component';
 import { PaginationButtonComponent } from '../shared/components/pagination-button/pagination-button.component';
 import { FormsModule } from '@angular/forms';
+import { Rating } from '../shared/models/rating.model';
+import { error } from 'console';
 
 @Component({
   selector: 'app-movie-detail',
@@ -23,10 +25,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class MovieDetailComponent implements OnInit {
   id = 0;
+  isMovieLoading: boolean = true;
+  isReviewLoading: boolean = true;
   movieDetail: Movie = new Movie(0, '', 0, 0, 0, 0, '', 0);
   reviewsList: any[] = [];
   reviewDesc = '';
   reviewRating = 0;
+  userSelfRating: Rating = new Rating('', '', 0, '', false);
 
   currentPageNumber: number = 1;
   reviewPageSize: number = 1;
@@ -34,25 +39,24 @@ export class MovieDetailComponent implements OnInit {
 
   constructor(
     @Inject(ActivatedRoute) private route: ActivatedRoute,
-    @Inject(Router) private router : Router,
+    @Inject(Router) private router: Router,
     private movieService: MovieService
   ) {}
 
   ngOnInit(): void {
-
-    this.route.params.subscribe((data)=> {
+    debugger;
+    this.route.params.subscribe((data) => {
       this.id = this.route.snapshot.params['id'];
       this.fetchData();
     });
-
   }
 
   getNumberFormat(num: number) {
-    return Intl.NumberFormat("en-US",{notation: "compact"}).format(num);
+    return Intl.NumberFormat('en-US', { notation: 'compact' }).format(num);
   }
 
-  goToCategoryPage(category:string){
-    this.router.navigate(['category',category]);
+  goToCategoryPage(category: string) {
+    this.router.navigate(['category', category]);
   }
 
   getFullName(user: any): string {
@@ -71,24 +75,45 @@ export class MovieDetailComponent implements OnInit {
   }
 
   fetchMovieReviews() {
+    this.isReviewLoading = true;
     this.movieService
-      .fetchMovieReviews(this.movieDetail.movieId, this.currentPageNumber)
+      .fetchMovieReviews(this.id, this.currentPageNumber)
       .subscribe((data: any) => {
         if (data.isSuccess == true) {
-          debugger; 
           this.reviewsList = data.result.data;
           this.currentPageNumber = data.result.currentPage;
           this.reviewPageSize = data.result.pageSize;
           this.totalItems = data.result.totalCount;
+          this.isReviewLoading = false;
         }
       });
   }
 
+  fetchSelfReview() {
+    this.movieService
+      .fetchSelfReviewForMovie(this.id)
+      .subscribe((data: any) => {
+        if (data.isSuccess == true) {
+          this.userSelfRating = data.result;
+          this.reviewRating = this.userSelfRating.rating;
+          this.reviewDesc = this.userSelfRating.description;
+        }
+      }, error => {
+
+      });
+  }
+
   fetchData() {
-    this.movieService.fetchMovieDetailById(this.id).subscribe((data: any) => {
-      this.movieDetail = data;
-      this.fetchMovieReviews();
-    });
+    this.isMovieLoading = true;
+    this.isReviewLoading = true;
+    this.movieService
+      .fetchMovieDetailById(this.id)
+      .subscribe((response: any) => {
+        this.movieDetail = response.result;
+        this.isMovieLoading = false;
+      });
+    this.fetchSelfReview();
+    this.fetchMovieReviews();
   }
 
   submitReview() {
@@ -96,20 +121,33 @@ export class MovieDetailComponent implements OnInit {
     console.log(this.reviewRating);
     console.log(this.movieDetail.movieId);
 
-    this.movieService
-      .addMovieReview(
-        this.movieDetail.movieId,
-        this.reviewRating,
-        this.reviewDesc
-      )
-      .then(() => {
-        this.fetchData();
-      });
+    if (this.userSelfRating.ratingId == 0) {
+      this.movieService
+        .addMovieReview(
+          this.movieDetail.movieId,
+          this.reviewRating,
+          this.reviewDesc
+        )
+        .then(() => {
+          this.fetchData();
+        });
+    } else {
+      this.movieService
+        .updateMovieReview(
+          this.movieDetail.movieId,
+          this.reviewRating,
+          this.reviewDesc,
+          this.userSelfRating.ratingId
+        )
+        .then(() => {
+          this.fetchData();
+        });
+    }
   }
 
   onPageChange(page: number): void {
     debugger;
     this.currentPageNumber = page;
-    this.fetchData();
+    this.fetchMovieReviews();
   }
 }

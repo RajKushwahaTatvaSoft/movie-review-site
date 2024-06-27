@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <form
+  (ngSubmit)="searchActorName()"
+  >
+    <div class="d-flex align-items-center mt-3">
+      <div>
+        <h4>Filters:</h4>
+      </div>
+      <div class="ms-3">
+        <div class="d-flex">
+          <input
+            [(ngModel)]="actorSearchInput"
+            type="text"
+            name="actorSearchInput"
+            class="form-control"
+            placeholder="Search By Actor Name"
+          />
+          <button class="btn btn-purple ms-2" (click)="searchActorName()">
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    @if(isLoading){
+    <div>
+      <app-shimmer-list [itemCount]="12"></app-shimmer-list>
+    </div>
+    } @else { @for (cast of paginatedCastList; track $index) {
+    <div class="col-md-2 mt-3">
+      <app-person-tile [personDetail]="cast"></app-person-tile>
+    </div>
+    } }
+  </div>
+  @if(paginatedCastList.length != 0){
+
+  <div class="d-flex justify-content-center">
+    <app-pagination-button
+      [currentPage]="currentPageNumber"
+      [itemsPerPage]="currentPageSize"
+      [totalItems]="totalItems"
+      (pageChanged)="onPageChange($event)"
+    ></app-pagination-button>
+  </div>
+
+  }
+</div>

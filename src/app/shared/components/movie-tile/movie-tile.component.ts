@@ -3,20 +3,17 @@ import {
   Inject,
   Input,
   OnChanges,
-  OnInit,
+  Output,
   SimpleChanges,
-  input,
+  EventEmitter
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Movie } from '../../models/movie.model';
-import {
-  ModalDismissReasons,
-  NgbModal,
-  NgbRatingModule,
-} from '@ng-bootstrap/ng-bootstrap';
-import { assert } from 'console';
+import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { MovieService } from '../../../core/services/movie.service';
+import { MovieTileData } from '../../models/movie-tile-data.model';
 
 @Component({
   selector: 'app-movie-tile',
@@ -25,28 +22,26 @@ import Swal from 'sweetalert2';
   templateUrl: './movie-tile.component.html',
   styleUrl: './movie-tile.component.css',
 })
-export class MovieTileComponent implements OnChanges {
-  ratingOutOfStar: number = 0;
+export class MovieTileComponent {
   static problemImagesMovieId: string[] = [];
   @Input() movieDetail: Movie = new Movie(0, '', 0, 0, 0, 0, '', 0);
+  @Input() movieTileData : MovieTileData = new MovieTileData(0,'','',0,0);
   @Input() isAdmin = false;
+  @Input() isDeletedMovie = false;
+  @Output() movieDeleted = new EventEmitter<void>();
+
   constructor(
+    private movieService: MovieService,
     @Inject(Router) private router: Router,
-    @Inject(ActivatedRoute) private route: ActivatedRoute,
-    private modalService: NgbModal
+    @Inject(ActivatedRoute) private route: ActivatedRoute
   ) {
-    this.ratingOutOfStar = this.movieDetail.rating / 2;
   }
 
   onImageError(movieId: string) {
     this.movieDetail.posterUrl =
-      'http://localhost:4200/assets/not_found_movie.svg';
+      '/assets/not_found_movie.svg';
     console.log(movieId);
     MovieTileComponent.problemImagesMovieId.push(movieId);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.ratingOutOfStar = this.movieDetail.rating / 2;
   }
 
   goToMovieDetail(id: number) {
@@ -62,22 +57,57 @@ export class MovieTileComponent implements OnChanges {
 
   deleteMovie(movieId: number) {}
 
-  openDeleteModal(content: string, movieId: number, event: Event) {
+  openDeleteModal(movieId: number, event: Event) {
     event.stopPropagation();
 
     Swal.fire({
-      title: 'Error!',
+      title: 'Confirmation',
       text: 'Are you sure want to remove this movie?',
       icon: 'warning',
       confirmButtonText: 'Yes',
-      imageHeight : 100,
+      imageHeight: "10",
       showCancelButton: true,
       focusCancel: true,
       cancelButtonColor: 'blueviolet',
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.value) {
-        console.log(true);
+        this.movieService.deleteMovieById(movieId).subscribe((data: any) => {
+          if (data.isSuccess) {
+            this.movieDeleted.emit();
+            Swal.fire('Removed!', 'Movie removed successfully.', 'success');
+          } else {
+            Swal.fire('Cancelled', 'Could\'nt Delete Movie.)', 'error');
+          }
+        });
+      }
+    });
+  }
+
+  
+  openRestoreModal(movieId: number, event: Event) {
+    event.stopPropagation();
+
+    Swal.fire({
+      title: 'Confirmation',
+      text: 'Are you sure want to restore this movie?',
+      icon: 'warning',
+      confirmButtonText: 'Yes',
+      imageHeight: "10",
+      showCancelButton: true,
+      focusCancel: true,
+      cancelButtonColor: 'blueviolet',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.value) {
+        this.movieService.restoreMovieById(movieId).subscribe((data: any) => {
+          if (data.isSuccess) {
+            this.movieDeleted.emit();
+            Swal.fire('Removed!', 'Movie restored successfully.', 'success');
+          } else {
+            Swal.fire('Cancelled', 'Couldn\'t restore movie.)', 'error');
+          }
+        });
       }
     });
   }

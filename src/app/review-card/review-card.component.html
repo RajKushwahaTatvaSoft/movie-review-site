@@ -6,21 +6,45 @@
   </i>
 </ng-template>
 
-<div class="card" style="height: 100px;">
-  <div class="d-flex justify-content-between">
-    <h5>{{userRating.userName}}</h5>
-    @if(userRating.isModified){
-      <span>Edited on {{userRating.reviewDate}}</span>
-    }
-    @else {
-      <span>On {{userRating.reviewDate}}</span>
-    }
+<div class="card p-2">
+  <div class="d-flex align-items-center">
+    <div class="">
+      @if(!isImageLoaded){
+      <!-- <div class=" rounded" [hidden]="isImageLoaded" style="height: 70px; width: 70px"></div> -->
+      }
+
+      <div [ngClass]="{'shimmer': !isImageLoaded}" style=" width: 70px;" class="rounded">
+        <img
+        src="{{ userRating.userProfileUrl }}"
+        alt="/assets/not_found_movie.svg"
+        class="rounded img-load-transistion "
+        (load)="isImageLoaded = true;"
+        [ngClass]="{'opacity-full': isImageLoaded}"
+        width="70"
+      />
+
+      </div>
+    </div>
+
+    <div class="w-100 ms-2">
+      <div class="d-flex justify-content-between">
+        <h5>{{ userRating.userName }}</h5>
+        @if(userRating.isModified){
+        <span>Edited on {{ userRating.reviewDate }}</span>
+        } @else {
+        <span>On {{ userRating.reviewDate }}</span>
+        }
+      </div>
+
+      <ngb-rating
+        [(rate)]="userRating.rating"
+        [starTemplate]="starTemplate"
+        [readonly]="true"
+        [max]="10"
+      />
+      <p style="text-overflow: ellipsis; overflow: hidden">
+        {{ userRating.description }}
+      </p>
+    </div>
   </div>
-  <ngb-rating
-    [(rate)]="userRating.rating"
-    [starTemplate]="starTemplate"
-    [readonly]="true"
-    [max]="10"
-  />
-  <p style="text-overflow: ellipsis; overflow: hidden;">{{userRating.description}}</p>
 </div>

@@ -1,0 +1,365 @@
+<div class="container-fluid">
+  <h3 class="my-3">Add Movie</h3>
+  <ul class="nav nav-tabs border-bottom-0" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link active"
+        id="home-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#home"
+        type="button"
+        role="tab"
+        aria-controls="home"
+        aria-selected="true"
+      >
+        Movie Detail
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link"
+        id="profile-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#profile"
+        type="button"
+        role="tab"
+        aria-controls="profile"
+        aria-selected="false"
+        (click)="setCastDetailSeen()"
+      >
+        Cast Detail
+        <span *ngIf="!isCastDetailSeen" class="nav-item-badge"> </span>
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link"
+        id="contact-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#contact"
+        type="button"
+        role="tab"
+        aria-controls="contact"
+        aria-selected="false"
+        (click)="setCrewDetailSeen()"
+      >
+        Crew Detail
+        <span *ngIf="!isCrewDetailSeen" class="nav-item-badge"> </span>
+      </button>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div
+      class="tab-pane fade show active"
+      id="home"
+      role="tabpanel"
+      aria-labelledby="home-tab"
+    >
+      <div movieDetailEntryPage>
+        <form [formGroup]="userForm">
+          <div class="row">
+            <div class="col-md-2 mt-3 d-flex flex-column">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="posterurl"
+                  formControlName="posterurl"
+                  placeholder="posterurl"
+                />
+                <label for="posterurl"
+                  >Poster Url
+                  <span class="text-danger">*</span>
+                </label>
+              </div>
+              <img
+                src="{{ userForm.value.posterurl }}"
+                alt="Not found"
+                class="img-fluid mt-2"
+              />
+              <div
+                *ngIf="
+                  userForm.get('posterurl')?.invalid &&
+                  userForm?.get('posterurl')?.touched &&
+                  userForm.get('posterurl')?.hasError('required')
+                "
+                class="text-danger"
+              >
+                Poster Url is required
+              </div>
+            </div>
+
+            <div class="col-md-10">
+              <div class="row">
+                <div class="col-md-4 mt-3">
+                  <div class="input-group">
+                    <div class="form-floating">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="imdbid"
+                        formControlName="imdbid"
+                        placeholder="imdbid"
+                      />
+
+                      <label for="imdbid"
+                        >ImdbId
+                        <span class="text-danger">*</span>
+                      </label>
+                    </div>
+
+                    <div
+                      *ngIf="userForm.value.imdbid?.length != 0"
+                      class="input-group-append d-flex align-items-center"
+                      (click)="fetchDetailsFromOmdb()"
+                    >
+                      <button
+                        class="btn btn-warning h-100 rounded-0 rounded-end me-2"
+                        type="button"
+                      >
+                        Fetch
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="
+                      userForm.get('imdbid')?.invalid &&
+                      userForm?.get('imdbid')?.touched &&
+                      userForm.get('imdbid')?.hasError('required')
+                    "
+                    class="text-danger"
+                  >
+                    ImdbId is required
+                  </div>
+                </div>
+
+                <div class="col-md-4 mt-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="title"
+                      formControlName="title"
+                      placeholder="Movie Title"
+                    />
+                    <label for="title"
+                      >Movie Title
+                      <span class="text-danger">*</span>
+                    </label>
+                  </div>
+                  <div
+                    *ngIf="
+                      userForm.get('title')?.invalid &&
+                      userForm?.get('title')?.touched &&
+                      userForm.get('title')?.hasError('required')
+                    "
+                    class="text-danger"
+                  >
+                    Movie Title is required
+                  </div>
+                </div>
+
+                <div class="col-md-4 mt-3">
+                  <div class="form-floating">
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="releasedate"
+                      formControlName="releasedate"
+                      placeholder="Release Date"
+                    />
+                    <label for="releasedate"
+                      >Release Date
+                      <span class="text-danger">*</span>
+                    </label>
+                  </div>
+                  <div
+                    *ngIf="
+                      userForm.get('releasedate')?.invalid &&
+                      userForm?.get('releasedate')?.touched &&
+                      userForm.get('releasedate')?.hasError('required')
+                    "
+                    class="text-danger"
+                  >
+                    Release Date is required
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2 mt-3">
+                  <div class="form-floating">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="revenue"
+                      formControlName="revenue"
+                      placeholder="Revenue"
+                    />
+                    <label for="revenue">Revenue (In $) </label>
+                  </div>
+                  <div
+                    *ngIf="
+                      userForm.get('revenue')?.invalid &&
+                      userForm?.get('revenue')?.touched &&
+                      userForm.get('revenue')?.hasError('min')
+                    "
+                    class="text-danger"
+                  >
+                    Revenue should be more than 0
+                  </div>
+                </div>
+
+                <div class="col-md-2 mt-3">
+                  <div class="form-floating">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="budget"
+                      formControlName="budget"
+                      placeholder="budget"
+                    />
+                    <label for="budget">Budget (In $) </label>
+                  </div>
+                  <div
+                    *ngIf="
+                      userForm.get('budget')?.invalid &&
+                      userForm?.get('budget')?.touched &&
+                      userForm.get('budget')?.hasError('min')
+                    "
+                    class="text-danger"
+                  >
+                    Budget should be more than 0
+                  </div>
+                </div>
+
+                <div class="col-md-4 mt-3">
+                  <div class="form-floating">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="duration"
+                      formControlName="duration"
+                      placeholder="duration"
+                    />
+                    <label for="duration"
+                      >Duration (In Mins)
+                      <span class="text-danger">*</span>
+                    </label>
+                  </div>
+                  <div
+                    *ngIf="
+                      userForm.get('duration')?.invalid &&
+                      userForm?.get('duration')?.touched
+                    "
+                    class="text-danger"
+                  >
+                    <span *ngIf="userForm.get('duration')?.hasError('required')"
+                      >Duration is required</span
+                    >
+                    <span *ngIf="userForm.get('duration')?.hasError('min')"
+                      >Duration should be more than 1</span
+                    >
+                  </div>
+                </div>
+
+                <div class="col-md-4 mt-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="writer"
+                      formControlName="writer"
+                      placeholder="writer"
+                    />
+                    <label for="writer">Writer </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mt-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="director"
+                      formControlName="director"
+                      placeholder="director"
+                    />
+                    <label for="director">Director </label>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex mt-3">
+                <h5>Genre :</h5>
+
+                <div class="ms-2 flex-grow-1">
+                  <ng-multiselect-dropdown
+                    class="form-select"
+                    [placeholder]="'Select Genre'"
+                    [settings]="genreDropDownSettings"
+                    [data]="genreList"
+                    formControlName="selectedGenre"
+                  >
+                  </ng-multiselect-dropdown>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 mt-3">
+              <div class="form-floating">
+                <textarea
+                  type="text"
+                  class="form-control"
+                  id="overview"
+                  formControlName="overview"
+                  placeholder="overview"
+                ></textarea>
+                <label for="overview">Overview</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 mt-3">
+              <div class="form-floating">
+                <textarea
+                  style="height: 100px"
+                  type="text"
+                  class="form-control"
+                  id="plot"
+                  formControlName="plot"
+                  placeholder="plot"
+                ></textarea>
+                <label for="plot">Plot (detail description)</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="profile"
+      role="tabpanel"
+      aria-labelledby="profile-tab"
+    >
+      <app-add-movie-cast [castItemsList]="castItemList" castDetailEntryPage></app-add-movie-cast>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="contact"
+      role="tabpanel"
+      aria-labelledby="contact-tab"
+    >
+      <app-add-movie-crew [crewItemsList]="crewItemList" crewDetailEntryPage></app-add-movie-crew>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center">
+    <button class="btn btn-success my-3" (click)="saveMovieDetails()">Save Movie</button>
+    <button class="btn btn-danger my-3 ms-3" (click)="showCancelMovieModal()">Cancel</button>
+    <button (click)="showCrew()">show crew</button>
+  </div>
+</div>

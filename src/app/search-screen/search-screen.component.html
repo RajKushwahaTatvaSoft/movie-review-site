@@ -1,25 +1,24 @@
 <div class="container-fluid" style="background-color: #f2f2f2">
-    <h4>Results for : {{ movieName }}</h4>
-  
-    <div class="row mx-2">
-      <div *ngIf="isLoading">
-        <app-shimmer-list [itemCount]="12"></app-shimmer-list>
-      </div>
-      @if(!isLoading){
-        <div *ngFor="let movie of moviesList" class="col-md-2 mb-3">
-          <app-movie-tile [movieDetail]="movie"></app-movie-tile>
-        </div>
-        <div *ngIf="moviesList.length === 0">No Results Found</div>
-      }
+  <h4>Results for : {{ movieName }}</h4>
+
+  <div class="row mx-2">
+    <div *ngIf="isLoading">
+      <app-shimmer-list [itemCount]="12"></app-shimmer-list>
     </div>
+    @if(!isLoading){
+    <div *ngFor="let movie of moviesList" class="col-md-2 mb-3">
+      <app-movie-tile [movieDetail]="movie"></app-movie-tile>
+    </div>
+    <div *ngIf="moviesList.length === 0">No Results Found</div>
+    }
   </div>
-  
-  <div *ngIf="moviesList.length !== 0" class="d-flex justify-content-center">
-    <app-pagination-button
-      [currentPage]="currentPageNumber"
-      [itemsPerPage]="categoryPageSize"
-      [totalItems]="totalItems"
-      (pageChanged)="onPageChange($event)"
-    ></app-pagination-button>
-  </div>
-  
+</div>
+
+<div *ngIf="moviesList.length !== 0" class="d-flex justify-content-center">
+  <app-pagination-button
+    [currentPage]="currentPageNumber"
+    [itemsPerPage]="currentPageSize"
+    [totalItems]="totalItems"
+    (pageChanged)="onPageChange($event)"
+  ></app-pagination-button>
+</div>

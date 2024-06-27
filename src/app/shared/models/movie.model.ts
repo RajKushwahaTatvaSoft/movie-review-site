@@ -3,16 +3,19 @@ export class Movie {
   title: string;
   releaseDateStr?: string;
   revenue: number;
-  overview?: string;
-  popularity: number;
-  imdbId?: string;
   budget: number;
+  popularity: number;
+  overview?: string;
+  imdbId?: string;
+  character?:string;
   genres: string;
   rating: number;
   duration? : number;
   posterUrl?: string;
   ratingCount: number;
   genreList?: string[] = [];
+  castList? :string [] = [];
+  crewList? :string [] = [];
 
   constructor(
     id: number,

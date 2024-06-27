@@ -1,1 +1,30 @@
-<p>admin-dashboard works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <form action="">
+            <div class="d-flex align-items-center mt-2">
+                    <input class="form-control" [(ngModel)]="selectedStartYear" name="selectedStartYear" type="number" placeholder="Enter Start Year">
+                    <span class="mx-2">To</span>
+                    <input class="form-control" type="number" [(ngModel)]="selectedEndYear" name="selectedEndYear" placeholder="Enter End Year">
+                    <button class="ms-2 btn btn-purple" type="submit" (click)="onMovieReleaseByYearApply()">Apply</button>
+                    <button class="ms-2 btn btn-purple" type="button" (click)="onMovieReleaseYearPrev()">Prev</button>
+                    <button class="ms-2 btn btn-purple" type="button" (click)="onMovieReleaseYearNext()">Next</button>
+                </div>
+            </form>
+            <canvas id="MovieReleasedEachYearChart" >{{ movieReleaseEachYearChart }}</canvas>
+        </div>
+        <div class="chart-container col-md-4">
+            <form action="">
+            <div class="d-flex align-items-center mt-2">
+                    <input class="form-control" [(ngModel)]="selectedStartYear" name="selectedStartYear" type="number" placeholder="Enter Start Year">
+                    <span class="mx-2">To</span>
+                    <input class="form-control" type="number" [(ngModel)]="selectedEndYear" name="selectedEndYear" placeholder="Enter End Year">
+                    <button class="ms-2 btn btn-purple" type="submit" (click)="onBudgetAndRevenueByYearApply()">Apply</button>
+                    <button class="ms-2 btn btn-purple" type="button" (click)="onMovieReleaseYearPrev()">Prev</button>
+                    <button class="ms-2 btn btn-purple" type="button" (click)="onMovieReleaseYearNext()">Next</button>
+                </div>
+            </form>
+            <canvas  id="BudgetAndRevenueChart" >{{ budgetAndRevenueChart }}</canvas>
+        </div>
+    </div>
+</div>

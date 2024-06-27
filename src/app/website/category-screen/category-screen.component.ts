@@ -8,11 +8,15 @@ import { Genre } from '../../shared/models/genre.model';
 import { Movie } from '../../shared/models/movie.model';
 import { ShimmerListComponent } from '../../shimmer-list/shimmer-list.component';
 
-
 @Component({
   selector: 'app-category-screen',
   standalone: true,
-  imports: [CommonModule, PaginationButtonComponent,MovieTileComponent,ShimmerListComponent],
+  imports: [
+    CommonModule,
+    PaginationButtonComponent,
+    MovieTileComponent,
+    ShimmerListComponent,
+  ],
   templateUrl: './category-screen.component.html',
   styleUrl: './category-screen.component.css',
 })
@@ -28,10 +32,9 @@ export class CategoryScreenComponent implements OnInit {
   constructor(
     @Inject(ActivatedRoute) private route: ActivatedRoute,
     private movieService: MovieService,
-    @Inject(Router) private router: Router,
+    @Inject(Router) private router: Router
   ) {}
 
-  
   printListToConsole() {
     MovieTileComponent.problemImagesMovieId.forEach((value, index) => {
       console.log(value);
@@ -41,20 +44,21 @@ export class CategoryScreenComponent implements OnInit {
   }
 
   ngOnInit(): void {
- 
     this.fetchGenreList();
 
     this.route.params.subscribe((val) => {
-      this.categoryName = val['categoryName'].toLowerCase().replaceAll('-',' ');
-      
-    if(!this.categoryName){
-      this.categoryName = 'Trending'
-    }
+      this.categoryName = val['categoryName']
+        .toLowerCase()
+        .replaceAll('-', ' ');
+
+      if (!this.categoryName) {
+        this.categoryName = 'Trending';
+      }
+      this.currentPageNumber = 1
 
       console.log(this.categoryName);
       this.fetchMovieList();
     });
-
   }
 
   fetchMovieList() {
@@ -67,23 +71,24 @@ export class CategoryScreenComponent implements OnInit {
       )
       .subscribe((response: any) => {
         debugger;
-        this.moviesList = response.data;
-        this.totalItems = response.totalCount;
-        this.currentPageNumber = response.currentPage;
+        this.moviesList = response.result.data;
+        this.totalItems = response.result.totalCount;
+        this.currentPageNumber = response.result.currentPage;
         this.isLoading = false;
       });
   }
 
-  fetchGenreList() {
-    this.movieService.fetchMovieGenres().subscribe((data) => {
-      this.genreList = data;
-      this.genreList.push(new Genre(0, 'Trending'));
-      this.genreList.sort((n1,n2) => n1.genreId - n2.genreId);
-    });
+  async fetchGenreList() {
+    this.genreList = await this.movieService.getGenreList();
+    this.genreList.push(new Genre(0, 'Trending'));
+    this.genreList.sort((n1, n2) => n1.genreId - n2.genreId);
   }
 
   goToCategoryPage(categoryName: string) {
-    this.router.navigate(['category', categoryName.toLowerCase().replaceAll(' ','-')]);
+    this.router.navigate([
+      'category',
+      categoryName.toLowerCase().replaceAll(' ', '-'),
+    ]);
   }
 
   onPageChange(page: number): void {

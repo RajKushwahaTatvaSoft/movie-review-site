@@ -1,0 +1,79 @@
+input.invalid{
+    border-color: red;
+}
+
+:host ::ng-deep .multiselect-dropdown .dropdown-btn {
+    background-color: white;
+}
+
+
+:host ::ng-deep .multiselect-dropdown .selected-item {
+    background-color: blueviolet !important;
+    border: none !important;
+    border-radius: 5px !important;
+    margin: 3px !important;
+    padding: 5px 10px 5px 10px !important;
+    font-size: 15px;
+    max-width: fit-content !important;
+}
+
+:host ::ng-deep .multiselect-dropdown .selected-item a{
+    font-size: 15px;
+}
+
+:host ::ng-deep .multiselect-item-checkbox input[type=checkbox]:checked + div:before{
+    background-color: blueviolet !important;
+}
+
+
+:host ::ng-deep .multiselect-item-checkbox input[type=checkbox] + div:before{
+    border-color: blueviolet !important;
+}
+
+
+:host ::ng-deep .multiselect-dropdown .dropdown-list{
+    position: fixed !important;
+    max-width: 300px;
+}
+
+.nav-item .nav-link {
+    border: none;
+    border-radius: 8px;
+    color: blueviolet;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+}
+
+.nav-item .nav-link:hover {
+    background-color: rgb(224, 224, 224);
+}
+
+
+.nav-item .nav-link.active {
+    background-color: blueviolet;
+    border: none;
+    border-radius: 8px;
+    color: white;
+}
+
+/* Define what each icon button should look like */
+.nav-item {
+    display: inline-block; /* Inline elements with width and height. TL;DR they make the icon buttons stack from left-to-right instead of top-to-bottom */
+    position: relative; /* All 'absolute'ly positioned elements are relative to this one */
+    padding: 2px 5px; /* Add some padding so it looks nice */
+  }
+  
+  /* Make the badge float in the top right corner of the button */
+  .nav-item-badge {
+    background-color: #fa3e3e;
+    border-radius: 2px;
+    color: white;
+   height: 10px;
+   width: 10px;
+   border-radius: 50%;
+    padding: 1px 3px;
+    font-size: 10px;    
+    position: absolute; /* Position the badge within the relatively positioned button */
+    top: 3px;
+    right: 13px;
+  }

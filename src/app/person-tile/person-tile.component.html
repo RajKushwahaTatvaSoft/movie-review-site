@@ -1,0 +1,65 @@
+<div
+  class="rounded position-relative fruite-item bg-white"
+  (click)="goToPersonPage(personDetail.personId)"
+>
+  <div class="fruite-img border border-secondary border-bottom-0">
+    <img
+      src="{{ personDetail.profilePath }}"
+      class="img-fluid w-100 rounded-top img-load-transistion"
+      onload="this.style.opacity=1;"
+      alt="no image"
+      style="object-fit: contain; background-color: #eaeaea"
+      (error)="onImageError()"
+    />
+  </div>
+
+  <!-- <div
+    class=" px-2 py-1 rounded d-flex align-items-center position-absolute"
+    style="top: 10px; left: 10px;background-color: #c8c8c8;"
+  >
+    {{ movieDetail.rottenTomato }} <img height="20px" class="ms-1" src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Rotten_Tomatoes.svg" alt="">
+  </div> -->
+
+  <div class="py-3 px-2 border border-secondary border-top-0 rounded-bottom">
+    <div class="d-flex align-items-center">
+      <p
+        class="h6"
+        style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
+      >
+        {{ personDetail.personName }}
+      </p>
+    </div>
+    <div>
+      <span>Acted in {{ personDetail.movieCount }} movies</span>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure to delete this?</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="d('Cross click')"
+    >
+      Cancel
+    </button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('yes')">
+      Yes
+    </button>
+  </div>
+</ng-template>

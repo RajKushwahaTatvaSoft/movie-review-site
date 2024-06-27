@@ -35,6 +35,15 @@
             >Categories</a
           >
         </li>
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            routerLink="/cast/"
+            (click)="movieSearchName = ''"
+            >Actors</a
+          >
+        </li>
       </ul>
       <form class="d-flex">
         <!-- <mat-autocomplete #auto="matAutocomplete">
@@ -50,7 +59,7 @@
           [(ngModel)]="movieSearchName"
           autocomplete="off"
           (input)="fetchSuggestions($event)"
-          placeholder="Search"
+          placeholder="Search For Movie"
           (focus)="fetchSuggestions($event)"
           (blur)="isShowSearchResults = false"
         />
@@ -60,18 +69,25 @@
       </form>
 
       <div class="ms-auto">
-        <div class="btn">
+        <button class="btn" (click)="goToProfile()">
+          @if(!isUserProfileLoaded){
           <img
             width="30px"
-            src="http://localhost:4200/assets/user_default_icon.svg"
+            src="/assets/user_default_icon.svg"
             alt="not found profile"
           />
+          }
+
+          <img
+            src="{{ userProfileUrl }}"
+            alt="/assets/not_found_movie.svg"
+            [hidden]="!isUserProfileLoaded"
+            (load)="isUserProfileLoaded = true"
+            height="30px"
+            class="rounded-circle"
+          />
+
           <span class="ms-2">{{ userName }}</span>
-        </div>
-      </div>
-      <div>
-        <button class="ms-2 btn btn-warning" *ngIf="isAdmin" (click)="goToAddMovie()">
-          Add Movie
         </button>
       </div>
       <div class="mx-2">
@@ -82,21 +98,22 @@
     </div>
   </div>
 </nav>
-
+ 
 @if(isShowSearchResults){
 
 <div style="position: relative" class="bg-white">
   <div
-    style="position: absolute; width: 300px; left: 250px; z-index: 100"
+    style="position: absolute; width: 300px; left: 250px; z-index: 200"
     class="bg-white shadow rounded overflow-hidden mx-2 my-1"
   >
-    <div
-      class="p-2 d-flex justify-content-between search-item"
-      *ngFor="let movie of movieSearchList"
-      (click)="goDirectToMovie(movie.movieId, movie.title)"
-    >
-      <span> {{ movie.title }}</span>
-      <i class="bi bi-box-arrow-up-right"></i>
+    <div class="p-2 search-item" *ngFor="let movie of movieSearchList">
+      <div 
+        (click)="goDirectToMovie(movie.movieId, movie.title)"
+        class="d-flex justify-content-between"
+      >
+        <span> {{ movie.title }}</span>
+        <i class="bi bi-box-arrow-up-right"></i>
+      </div>
     </div>
   </div>
 </div>

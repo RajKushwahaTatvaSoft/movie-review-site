@@ -1,10 +1,13 @@
-<div class="container-fluid">
-  <div class="d-flex">
-    <div>
+<div class="container-fluid mt-3">
+  @if(isMovieLoading){
+  <div class="shimmer w-100" style="height: 500px"></div>
+
+  } @else {
+
+  <div class="row">
+    <div class="col-md-2">
       <img
         src="{{ movieDetail.posterUrl }}"
-        height="500"
-        width="500"
         class="img-fluid"
         style="object-fit: contain"
         alt="not found"
@@ -14,87 +17,155 @@
         "
       />
     </div>
-    <div class="mx-4 flex-grow-1">
-      <h4>{{ movieDetail.title }} ({{ movieDetail.releaseDateStr }})</h4>
 
-      <div class="d-flex align-items-center">
-        <div class="d-block">
-          <ngb-rating
-            [(rate)]="movieDetail.rating"
-            [starTemplate]="starTemplate"
-            [readonly]="true"
-            [max]="10"
-          />
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-6">
+          <h4>{{ movieDetail.title }} ({{ movieDetail.releaseDateStr }})</h4>
+
+          <div class="d-flex align-items-center">
+            <div class="d-block">
+              <ngb-rating
+                [(rate)]="movieDetail.rating"
+                [starTemplate]="starTemplate"
+                [readonly]="true"
+                [max]="10"
+              />
+            </div>
+            <span class="ms-2">({{ movieDetail.ratingCount }})</span>
+          </div>
+
+          <div class="">
+            <div class="mt-3"><span>Genre :</span></div>
+            <div class="d-flex flex-wrap">
+              @if(movieDetail.genreList?.length == 0){
+              <span><b>No data available</b></span>
+              } @else{
+
+              <div
+                class="bg-info d-inline ms-2 py-2 mt-3 px-4 rounded-pill text-white"
+                *ngFor="let genre of movieDetail.genreList"
+                (click)="goToCategoryPage(genre)"
+              >
+                {{ genre }}
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="">
+            <div class="mt-3"><span>Cast :</span></div>
+            <div class="d-flex flex-wrap">
+              @if(movieDetail.castList?.length == 0){
+              <span><b>No data available</b></span>
+              } @else{ @for(cast of movieDetail.castList;track $index){
+
+              <div
+                class="bg-info d-inline ms-2 py-2 mt-3 px-4 rounded-pill text-white"
+                *ngIf="$index < 10"
+              >
+                {{ cast }}
+              </div>
+
+              } }
+            </div>
+          </div>
+
+          <div class="">
+            <div class="mt-3"><span>Crew :</span></div>
+            <div class="d-flex flex-wrap">
+              @if(movieDetail.crewList?.length == 0){
+              <span><b>No data available</b></span>
+              } @else{
+
+                @for(crew of movieDetail.crewList;track $index){
+
+                  <div
+                    class="bg-info d-inline ms-2 py-2 mt-3 px-4 rounded-pill text-white"
+                    *ngIf="$index < 10"
+                  >
+                    {{ crew }}
+                  </div>
+    
+                  }
+
+              }
+            </div>
+          </div>
         </div>
-        <span class="ms-2">({{ movieDetail.ratingCount }})</span>
+
+        <div class="col-md-6">
+          <div class="mt-3" *ngIf="movieDetail.duration != null">
+            Duration : {{ getHourlyTime(movieDetail.duration) }}
+          </div>
+
+          <div class="mt-3">
+            {{ movieDetail.overview }}
+          </div>
+
+          <div class="mt-3">
+            Revenue: $ {{ getNumberFormat(movieDetail.revenue) }}
+          </div>
+
+          <div class="mt-3">
+            Budget: $ {{ getNumberFormat(movieDetail.budget) }}
+          </div>
+          <!-- <span>{{movieDetail.genres}}</span> -->
+
+          <ng-template #starTemplate let-fill="fill">
+            <i class="bi-star-fill">
+              @if (fill > 0) {
+              <i class="bi-star-fill filled" [style.width.%]="fill"></i>
+              }
+            </i>
+          </ng-template>
+
+          <form>
+            <h6 class="mt-2">Submit Your Review Here</h6>
+            <div style="width: 100px">
+              <ngb-rating
+                [(rate)]="reviewRating"
+                [starTemplate]="starTemplate"
+                [readonly]="false"
+                [max]="10"
+              />
+            </div>
+
+            <div class="form-floating">
+              <textarea
+                class="center flex roboto-thin form-control"
+                [(ngModel)]="reviewDesc"
+                name="description"
+                type="text"
+                placeholder="Describe Your Experience"
+              ></textarea>
+              <label for="">Describe Your Experience</label>
+            </div>
+
+            <button
+              class="float-end btn btn-warning mt-2"
+              (click)="submitReview()"
+            >
+              Submit Review
+            </button>
+          </form>
+        </div>
       </div>
-
-      <span class="fw-normal d-block mt-3"
-        >Genres :
-        <div
-          class="bg-info d-inline ms-2 py-2 px-4 rounded-pill text-white"
-          *ngFor="let genre of movieDetail.genreList"
-          (click)="goToCategoryPage(genre)"
-        >
-          {{ genre }}
-        </div>
-      </span>
-
-      <div class="mt-3" *ngIf="movieDetail.duration != null">
-        {{ getHourlyTime(movieDetail.duration) }}
-      </div>
-
-      <div class="mt-3">
-        {{ movieDetail.overview }}
-      </div>
-
-      <div class="mt-3">Revenue: $ {{ getNumberFormat(movieDetail.revenue) }}</div>
-
-      <div class="mt-3">Budget: $ {{ getNumberFormat(movieDetail.budget) }}</div>
-      <!-- <span>{{movieDetail.genres}}</span> -->
-
-      <ng-template #starTemplate let-fill="fill">
-        <i class="bi-star-fill">
-          @if (fill > 0) {
-          <i class="bi-star-fill filled" [style.width.%]="fill"></i>
-          }
-        </i>
-      </ng-template>
-
-      <form>
-        <h6 class="mt-2">Submit Your Review Here</h6>
-        <div style="width: 100px">
-          <ngb-rating
-            [(rate)]="reviewRating"
-            [starTemplate]="starTemplate"
-            [readonly]="false"
-            [max]="10"
-          />
-        </div>
-
-        <div class="form-floating">
-          <textarea
-            class="center flex roboto-thin form-control"
-            [(ngModel)]="reviewDesc"
-            name="description"
-            type="text"
-            placeholder="Describe Your Experience"
-          ></textarea>
-          <label for="">Describe Your Experience</label>
-        </div>
-
-        <button class="float-end btn btn-warning mt-2" (click)="submitReview()">
-          Submit Review
-        </button>
-      </form>
     </div>
   </div>
 
+  } @if (isReviewLoading) {
+
+  <div class="row">
+    <div *ngFor="let i of [1, 2, 3, 4]" class="col-md-6 mt-3">
+      <div class="shimmer w-100" style="height: 100px"></div>
+    </div>
+  </div>
+  } @else {
+
   <div class="row">
     <div *ngFor="let rating of reviewsList" class="col-md-6 mt-3">
-      <app-review-card
-      [userRating]="rating"
-      ></app-review-card>
+      <app-review-card [userRating]="rating"></app-review-card>
     </div>
 
     <div *ngIf="reviewsList.length > 0" class="d-flex justify-content-center">
@@ -106,4 +177,5 @@
       ></app-pagination-button>
     </div>
   </div>
+  }
 </div>

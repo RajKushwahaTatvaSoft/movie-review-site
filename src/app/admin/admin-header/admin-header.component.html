@@ -1,0 +1,94 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a routerLink="dashboard" class="navbar-brand">Movie Info</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarScroll"
+        aria-controls="navbarScroll"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <ul
+          class="navbar-nav my-2 my-lg-0 navbar-nav-scroll"
+          style="--bs-scroll-height: 100px"
+        >
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="dashboard"
+              >Dashboard</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="movies"
+              >Movie</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="users"
+              >User</a
+            >
+          </li>
+          
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="crews"
+              >Crew</a
+            >
+          </li>
+        </ul>
+  
+        <div class="ms-auto">
+          <button class="btn" (click)="goToProfile()">
+            @if(!isUserProfileLoaded){
+            <img
+              width="30px"
+              src="/assets/user_default_icon.svg"
+              alt="not found profile"
+            />
+            }
+  
+            <img
+              src="{{
+                userProfileUrl
+              }}"
+              alt="/assets/not_found_movie.svg"
+              [hidden]="!isUserProfileLoaded"
+              (load)="isUserProfileLoaded = true"
+              height="30px"
+              class="rounded-circle"
+            />
+  
+            <span class="ms-2">{{ userName }}</span>
+          </button>
+        </div>
+        <div>
+          <button
+            class="ms-2 btn btn-warning"
+            (click)="goToAddMovie()"
+          >
+            Add Movie
+          </button>
+        </div>
+        <div class="mx-2">
+          <button class="btn btn-outline-danger" (click)="logoutUser()">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav> 

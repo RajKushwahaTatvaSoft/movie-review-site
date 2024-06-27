@@ -11,24 +11,97 @@ textarea:focus{
     box-shadow: none !important;
 }
 
-.btn-purple{
-    border-color: blueviolet;
-    color: blueviolet;
+.btn-light-red{
+  background-color: #ef3f3f;
+  color: white;
 }
 
+.btn-light-red:hover{
+  background-color: red;
+  color: white;
+}
+
+.btn-light-red:active{
+  background-color: red !important;
+  color: white !important;
+}
+
+.btn-purple{
+    border-color: blueviolet !important;
+    color: blueviolet !important;
+}
 
 .btn-purple:hover{
-    background-color: blueviolet;
-    color: white;
+    background-color: blueviolet !important;
+    color: white !important;
 }
 
+.btn-purple:active{
+    background-color: blueviolet !important;
+    color: white !important;
+}
 
 .btn-purple-fill{
-    color: white;
-    background-color: blueviolet;
+    color: white !important;
+    background-color: blueviolet !important;
 }
 
 .btn-purple-fill:hover{
-    color: white;
-    background-color: purple;
+    color: white !important;
+    background-color: purple !important;
 }
+
+
+.btn-purple-fill:active{
+    color: white !important;
+    background-color: purple !important;
+}
+
+/* Image Loading Transition */
+
+.img-load-transistion{
+  opacity: 0;
+  -webkit-transition: all 3s ease; 
+  -moz-transition: all 3s ease; 
+  -ms-transition: all 3s ease; 
+  -o-transition: all 3s ease; 
+}
+
+.opacity-full{
+  opacity: 1;
+}
+
+.opacity-none{
+  opacity: 0;
+}
+
+/* Shimmer Animation CSS */
+
+.shimmer {
+    position: relative;
+  }
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(
+      -45deg,
+      #f0f0f0 25%,
+      #e4e4e4 50%,
+      #f0f0f0 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmerAnimation 2s infinite;
+  }
+  @keyframes shimmerAnimation {
+    0% {
+      background-position: -100% 0;
+    }
+    100% {
+      background-position: 100% 0;
+    }
+  }
+  

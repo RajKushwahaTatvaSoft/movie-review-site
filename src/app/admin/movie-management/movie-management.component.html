@@ -1,16 +1,77 @@
+<div class="d-flex justify-content-between my-3">
+  <h4>Movies</h4>
+
+  <button class="btn btn-light-red" (click)="goToDeletedMoviesPage()">
+    <span>View Deleted Movies</span>
+    <i class="ms-2 bi bi-trash"></i>
+  </button>
+</div>
 <div class="d-flex justify-content-between m-2">
-    <h4>Trending</h4>
-    <button class="btn btn-purple">
-      View All
-    </button>
+  <form class="w-100" [formGroup]="filterForm">
+    <div class="row">
+      <div class="col-md-1">
+        <div class="form-floating">
+          <select
+            (change)="fetchData()"
+            class="form-select"
+            formControlName="categoryId"
+            name="categoryId"
+            aria-label="Default select example"
+          >
+            <option selected value="0">All</option>
+            <option value="{{ genre.genreId }}" *ngFor="let genre of genreList">
+              {{ genre.genreName }}
+            </option>
+          </select>
+
+          <label for="">Genre</label>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="form-floating">
+          <input
+            (blur)="fetchData()"
+            (keyup.enter)="fetchData()"
+            class="form-control"
+            formControlName="searchName"
+            name="searchName"
+            placeholder="Movie Name"
+          />
+
+          <label for="">Movie Name</label>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="row mx-2">
+  <div *ngIf="isLoading">
+    <app-shimmer-list [itemCount]="6"></app-shimmer-list>
   </div>
 
-  <div class="row mx-2">
-    <div *ngIf="trendingMovies.length == 0">
-      <app-shimmer-list [itemCount]="6"></app-shimmer-list>
+  @if(!isLoading){ @if(moviesList.length != 0){
+    <div *ngFor="let movie of moviesList" class="col-md-2 mb-3">
+      <app-movie-tile
+        [movieDetail]="movie"
+        [isAdmin]="true"
+        (movieDeleted)="onMovieDeleted()"
+      ></app-movie-tile>
     </div>
-
-    <div *ngFor="let movie of trendingMovies" class="col-md-2 mb-3">
-      <app-movie-tile [movieDetail]="movie" [isAdmin]="true"></app-movie-tile>
+  
+    <div class="d-flex justify-content-center">
+      <app-pagination-button
+        [currentPage]="currentPageNumber"
+        [itemsPerPage]="currentPageSize"
+        [totalItems]="totalItems"
+        (pageChanged)="onPageChange($event)"
+      ></app-pagination-button>
     </div>
-  </div>
+   }
+   @else {
+    <div>No movie found</div>
+   }
+  
+  }
+</div>

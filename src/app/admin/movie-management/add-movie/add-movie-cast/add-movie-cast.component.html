@@ -1,0 +1,47 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4 d-flex mt-3" *ngFor="let castItem of castItemsList">
+      <ng-multiselect-dropdown
+        class="h-100 flex-grow-1"
+        [placeholder]="'Select Cast'"
+        [settings]="castDropDownSettings"
+        [data]="castList"
+        [(ngModel)]="castItem.selectedPerson"
+        (onDropDownClose)="clearCastList()"
+        (onFilterChange)="fetchCastList($event)"
+      >
+      </ng-multiselect-dropdown>
+
+      <div class="form-floating ms-2 flex-grow-1">
+        <input
+          type="text"
+          id="character"
+          class="form-control"
+          placeholder="Character"
+          [(ngModel)]="castItem.characterName"
+        />
+        <label for="character">Character</label>
+      </div>
+
+      
+      <div>
+        <button class="btn btn-danger" (click)="removeCastItem(castItem)">
+            <i class="bi bi-trash"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <div class="col-md-4 d-flex mt-3">
+      <button class="btn btn-purple-fill px-4" (click)="addNewCastItem()">
+        Add
+      </button>
+      <button
+        class="btn btn-purple-fill px-4 ms-2"
+        (click)="showSelectedCast()"
+      >
+        Show List
+      </button>
+    </div>
+  </div>
+</div>

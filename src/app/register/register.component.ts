@@ -38,4 +38,8 @@ export class RegisterComponent {
         
       });
   }
+
+  onSignIn(){    
+    this.router.navigateByUrl('/login');
+  }
 }

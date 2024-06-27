@@ -1,0 +1,115 @@
+<div class="container-fluid p-4">
+  <div class="row">
+    <div class="col-md-2">
+        <h4>Profile</h4>
+      <div class="">
+        <form
+        *ngIf="isEditProfilePhoto"
+          (ngSubmit)="uploadUserProfilePhoto()"
+          [formGroup]="userProfilePhotoForm"
+        >
+
+          <input
+            type="file"
+            accept="image/png, image/jpeg, image/jpg"
+            placeholder="Profile"
+            name="ProfilePhotoFile"
+            class="form-control"
+            (change)="onFileChanged($event)"
+          />
+
+          <div class="d-flex mt-3">
+            <button class="btn btn-purple-fill" type="submit">Save</button>
+            <button class="btn btn-outline-danger ms-2" type="button" (click)="onCancelEditPhoto()">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="mt-2 img-div" *ngIf="!isEditProfilePhoto" (click)="onEditProfilePhoto()">
+        <!-- <button class="btn btn-purple" style="position: fixed; background-color: white;">Edit</button> -->
+        <img
+        
+          src="{{ loggedInUser.profilePath }}"
+          alt="cannot find"
+          class="rounded-circle shadow"
+          style="object-fit: cover; width: 250px; height: 250px; display: inline-block;"
+          (error)="loggedInUser.profilePath = '/assets/not_found_movie.svg'"
+        />
+      </div>
+    </div>
+
+    <div class="col-md-10">
+      <form
+        (ngSubmit)="updateUserProfileDetails()"
+        [formGroup]="userProfileDetailsForm"
+      >
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="First Name"
+                formControlName="firstName"
+                value="{{ loggedInUser.firstName }}"
+              />
+              <label for="">First Name</label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Last Name"
+                formControlName="lastName"
+                value="{{ loggedInUser.lastName }}"
+              />
+              <label for="">Last Name</label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Email"
+                formControlName="userEmail"
+                value="{{ loggedInUser.email }}"
+              />
+              <label for="">Email</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-3">
+          <button
+            class="btn btn-purple-fill"
+            *ngIf="!isEditDetail"
+            (click)="onEditDetailClick()"
+            type="button"
+          >
+            Edit
+          </button>
+          <button
+            class="btn btn-success ms-2"
+            *ngIf="isEditDetail"
+            type="submit"
+          >
+            Save
+          </button>
+          <button
+            class="btn btn-outline-danger ms-2"
+            *ngIf="isEditDetail"
+            (click)="onCancelEditDetail()"
+            type="button"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

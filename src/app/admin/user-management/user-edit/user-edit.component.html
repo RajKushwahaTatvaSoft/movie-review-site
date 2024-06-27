@@ -1,0 +1,119 @@
+<h5 class="mt-4">Edit User</h5>
+
+<form [formGroup]="userEditForm" class="" (ngSubmit)="submitUserEditForm()">
+  <div class="row">
+
+    <div class="col-md-3 mt-3">
+        <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="firstName"
+              formControlName="firstName"
+              placeholder="firstName"
+            />
+            <label for="firstName"
+              >First Name
+              <span class="text-danger">*</span>
+            </label>
+          </div>
+    
+          <div
+            *ngIf="
+              userEditForm.get('firstName')?.invalid &&
+              userEditForm?.get('firstName')?.touched &&
+              userEditForm.get('firstName')?.hasError('required')
+            "
+            class="text-danger"
+          >
+            First Name is required
+          </div>
+    </div>
+
+    <div class="col-md-3 mt-3">
+      <div class="input-group">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            formControlName="lastName"
+            placeholder="lastName"
+          />
+
+          <label for="lastName"
+            >Last Name
+          </label>
+        </div>
+      </div>
+      <div
+        *ngIf="
+          userEditForm.get('lastName')?.invalid &&
+          userEditForm?.get('lastName')?.touched &&
+          userEditForm.get('lastName')?.hasError('required')
+        "
+        class="text-danger"
+      >
+        Last Name is required
+      </div>
+    </div>
+
+    <div class="col-md-3 mt-3">
+      <div class="form-floating">
+        <input
+          type="text"
+          class="form-control"
+          id="userEmail"
+          formControlName="userEmail"
+          placeholder="Email"
+        />
+        <label for="userEmail"
+          >Email
+          <span class="text-danger">*</span>
+        </label>
+      </div>
+      <div
+        *ngIf="
+          userEditForm.get('userEmail')?.invalid &&
+          userEditForm?.get('userEmail')?.touched &&
+          userEditForm.get('userEmail')?.hasError('required')
+        "
+        class="text-danger"
+      >
+        Email is required
+      </div>
+    </div>
+
+    <div class="col-md-3 mt-3">
+      <div class="form-floating">
+        <select
+          class="form-select"
+          id="roleId"
+          formControlName="roleId"
+          placeholder="Role"
+        >
+          <option value="0" disabled>-- Select Role --</option>
+          <option *ngFor="let role of roleList" value="{{ role.roleId }}">
+            {{ role.roleName }}
+          </option>
+        </select>
+        <label for="roleId"
+          >Role
+          <span class="text-danger">*</span>
+        </label>
+      </div>
+      <div
+        *ngIf="
+          userEditForm.get('roleId')?.invalid &&
+          userEditForm?.get('roleId')?.touched &&
+          userEditForm.get('roleId')?.hasError('required')
+        "
+        class="text-danger"
+      >
+        Role is required
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

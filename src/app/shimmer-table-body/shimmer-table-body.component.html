@@ -1,0 +1,16 @@
+<table class="table">
+  <thead>
+    <tr>        
+      <td *ngFor="let col of colArray">
+        <div class="shimmer w-100 h-100"></div>
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of rowArray">        
+        <td *ngFor="let col of colArray">
+          <div class="shimmer w-100 h-100"></div>
+        </td>
+      </tr>
+  </tbody>
+</table>

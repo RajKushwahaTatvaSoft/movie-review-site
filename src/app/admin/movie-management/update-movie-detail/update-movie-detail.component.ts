@@ -1,17 +1,18 @@
 import { Component, Inject, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MovieService } from '../../core/services/movie.service';
-import { Movie } from '../../shared/models/movie.model';
+import { MovieService } from '../../../core/services/movie.service';
+import { Movie } from '../../../shared/models/movie.model';
 import { CommonModule } from '@angular/common';
 import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReviewCardComponent } from '../../review-card/review-card.component';
-import { PaginationButtonComponent } from '../../shared/components/pagination-button/pagination-button.component';
+import { ReviewCardComponent } from '../../../review-card/review-card.component';
+import { PaginationButtonComponent } from '../../../shared/components/pagination-button/pagination-button.component';
 import {
   FormBuilder,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-update-movie-detail',
@@ -45,9 +46,8 @@ export class UpdateMovieDetailComponent {
     @Inject(Router) private router: Router,
     private movieService: MovieService
   ) {
-
-    
     this.userForm = this.formBuilder.group({
+      movieId: [0, Validators.required],
       title: ['', Validators.required],
       releasedate: ['', Validators.required],
       duration: ['', [Validators.required, Validators.min(1)]],
@@ -62,11 +62,9 @@ export class UpdateMovieDetailComponent {
       director: [''],
     });
 
-    
-    if(this.isEditing){
+    if (this.isEditing) {
       this.userForm.enable();
-    }
-    else{
+    } else {
       this.userForm.disable();
     }
   }
@@ -78,20 +76,18 @@ export class UpdateMovieDetailComponent {
     });
   }
 
-  get editButtonText () : string{
-    return this.isEditing? 'Cancel' : 'Edit';
+  get editButtonText(): string {
+    return this.isEditing ? 'Cancel' : 'Edit';
   }
 
-  toggleEdit(){
+  toggleEdit() {
     this.isEditing = !this.isEditing;
 
-    if(this.isEditing){
+    if (this.isEditing) {
       this.userForm.enable();
-    }
-    else{
+    } else {
       this.userForm.disable();
     }
-
   }
 
   getNumberFormat(num: number) {
@@ -133,55 +129,36 @@ export class UpdateMovieDetailComponent {
 
   fetchData() {
     this.movieService.fetchMovieDetailById(this.id).subscribe((data: any) => {
-      this.movieDetail = data;
+      this.movieDetail = data.result;
 
       this.userForm.patchValue({
+        movieId: this.id,
         title: this.movieDetail.title,
-        releasedate: this.getValidDate(this.movieDetail.releaseDateStr || ''),
+        releasedate: this.getValidDate(this.movieDetail.releaseDateStr|| ''),
         duration: this.movieDetail.duration?.toString() || '',
         posterurl: this.movieDetail.posterUrl || '',
         imdbid: this.movieDetail.imdbId || '',
-        revenue: this.movieDetail.budget.toString(),
-        budget: '',
+        revenue: this.movieDetail.revenue.toString(),
+        budget: this.movieDetail.budget.toString(),
         overview: this.movieDetail.overview || '',
         plot: this.movieDetail.overview || '',
-        writer: '',
-        actor: '',
-        director: '',
       });
       this.fetchMovieReviews();
     });
   }
 
-  private monthNumbers = new Map([
-    ['jan', 0],
-    ['feb', 1],
-    ['mar', 2],
-    ['apr', 3],
-    ['may', 4],
-    ['jun', 5],
-    ['jul', 6],
-    ['aug', 7],
-    ['sep', 8],
-    ['oct', 9],
-    ['nov', 10],
-    ['dec', 11],
-  ]);
 
-  private getMonthNumber(month: string): number {
-    return this.monthNumbers.get(month.toLowerCase()) || -1;
-  }
 
   getValidDate(value: string) {
     // Split the date string into components (day, month, year)
-    const dateParts = value.split(' ');
+    const dateParts = value.split('-');
     if (dateParts.length !== 3) {
       console.warn(`Invalid date format: ${value}`);
       return value; // Return original value for invalid formats
     }
 
     const day = parseInt(dateParts[0], 10);
-    const month = this.getMonthNumber(dateParts[1].toLowerCase());
+    const month = parseInt(dateParts[1],10)
     const year = parseInt(dateParts[2], 10);
 
     // Create a Date object with the extracted components
@@ -191,14 +168,6 @@ export class UpdateMovieDetailComponent {
     return date.toISOString().slice(0, 10);
   }
 
-  extractBudgetNumbers(budgetString: string): string {
-    // Use a regular expression to match digits, ".", "+" or "-".
-    const regex = /[\d\-+\.]/g; // Add 'g' flag for global matching
-    const match = budgetString.match(regex);
-
-    // If a match is found, join the matched characters into a string.
-    return match ? match.join('') : '';
-  }
 
   submitReview() {
     console.log(this.reviewDesc);
@@ -220,5 +189,41 @@ export class UpdateMovieDetailComponent {
     debugger;
     this.currentPageNumber = page;
     this.fetchData();
+  }
+
+  updateMovie() {
+    this.movieService.updateMovie(this.userForm.value);
+  }
+
+  deleteMovie() {
+    this.movieService.deleteMovieById(this.id);
+  }
+
+  
+  openDeleteModal() {
+
+    Swal.fire({
+      title: 'Confirmation',
+      text: 'Are you sure want to remove this movie?',
+      icon: 'warning',
+      confirmButtonText: 'Yes',
+      imageHeight: "10",
+      showCancelButton: true,
+      focusCancel: true,
+      cancelButtonColor: 'blueviolet',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.value) {
+        this.movieService.deleteMovieById(this.id).subscribe((data: any) => {
+          if (data.isSuccess) {
+            Swal.fire('Removed!', 'Movie removed successfully.', 'success');
+          } else {
+            Swal.fire('Cancelled', 'Movie is still in our database.', 'error');
+          }
+        },(error)=>{
+          Swal.fire('Cancelled', 'Error occured while deleting movie.', 'error');
+        });
+      }
+    });
   }
 }

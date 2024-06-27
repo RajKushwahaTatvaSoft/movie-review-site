@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MovieService } from '../core/services/movie.service';
 
@@ -14,22 +14,20 @@ import { MovieService } from '../core/services/movie.service';
 })
 export class HeaderComponent {
   userName: string;
+  userProfileUrl : string;
   movieSearchName: string = '';
   movieSearchList: { movieId: number; title: string }[] = [];
   isShowSearchResults = false;
-  isAdmin = false;
+  isUserProfileLoaded = false;
 
   constructor(
     private authService: AuthService,
     private movieService: MovieService,
-    @Inject(Router) private router: Router
+    @Inject(Router) private router: Router,
+    private route: ActivatedRoute
   ) {
     this.userName = localStorage.getItem('userFullName') || '';
-    this.isAdmin = authService.isAdmin();
-  }
-
-  goToAddMovie() {
-    this.router.navigate(['admin','add-movie']);
+    this.userProfileUrl = localStorage.getItem('userProfileUrl') || '';
   }
 
   logoutUser() {
@@ -53,10 +51,12 @@ export class HeaderComponent {
 
   goDirectToMovie(movieId: number, movieName: string) {
     debugger;
-    this.movieSearchList = [];
+    console.log('start');
     this.movieSearchName = movieName;
     let str = this.movieSearchName.replaceAll(' ', '-');
     this.router.navigate(['search', str, 'movie', movieId]);
+    this.movieSearchList = [];
+    console.log('end');
   }
 
   fetchSuggestions(event: any) {
@@ -75,5 +75,9 @@ export class HeaderComponent {
       .subscribe((data: any) => {
         this.movieSearchList = data.result;
       });
+  }
+
+  goToProfile() {
+    this.router.navigate(['home','profile']);
   }
 }

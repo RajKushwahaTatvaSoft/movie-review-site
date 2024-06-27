@@ -1,0 +1,235 @@
+<div class="container-fluid">
+  
+  <form [formGroup]="userForm">
+    <div class="d-flex">
+      <div>
+        <div class="">
+          <div class="mt-2 form-floating">
+            <input
+              [disabled]="isEditing"
+              type="text"
+              class="form-control"
+              name="posterurl"
+              formControlName="posterurl"
+              placeholder="imdbid"
+            />
+            <label for="posterurl"
+              >Poster
+              <span class="text-danger">*</span>
+            </label>
+          </div>
+          <div
+            *ngIf="
+              userForm.get('imdbid')?.invalid &&
+              userForm?.get('imdbid')?.touched &&
+              userForm.get('imdbid')?.hasError('required')
+            "
+            class="text-danger"
+          >
+            PosterUrl is required
+          </div>
+
+          <img class="mt-2" src="{{ userForm.value.posterurl }}" alt="No image" />
+        </div>
+      </div>
+      <div class="ms-3">
+        <div class="row">
+          <div class="col-md-4 mt-3">
+            <div class="form-floating">
+              <input
+                [disabled]="isEditing"
+                type="text"
+                class="form-control"
+                name="imdbid"
+                formControlName="imdbid"
+                placeholder="imdbid"
+              />
+              <label for="imdbid"
+                >ImdbId
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div
+              *ngIf="
+                userForm.get('imdbid')?.invalid &&
+                userForm?.get('imdbid')?.touched &&
+                userForm.get('imdbid')?.hasError('required')
+              "
+              class="text-danger"
+            >
+              ImdbId is required
+            </div>
+          </div>
+
+          <div class="col-md-4 mt-3">
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                formControlName="title"
+                placeholder="Movie Title"
+              />
+              <label for="title"
+                >Movie Title
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div
+              *ngIf="
+                userForm.get('title')?.invalid &&
+                userForm?.get('title')?.touched &&
+                userForm.get('title')?.hasError('required')
+              "
+              class="text-danger"
+            >
+              Movie Title is required
+            </div>
+          </div>
+
+          <div class="col-md-4 mt-3">
+            <div class="form-floating">
+              <input
+                type="date"
+                class="form-control"
+                id="releasedate"
+                formControlName="releasedate"
+                placeholder="Release Date"
+              />
+              <label for="releasedate"
+                >Release Date
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div
+              *ngIf="
+                userForm.get('releasedate')?.invalid &&
+                userForm?.get('releasedate')?.touched &&
+                userForm.get('releasedate')?.hasError('required')
+              "
+              class="text-danger"
+            >
+              Release Date is required
+            </div>
+          </div>
+
+          <div class="col-md-2 mt-3">
+            <div class="form-floating">
+              <input
+                type="number"
+                class="form-control"
+                id="revenue"
+                formControlName="revenue"
+                placeholder="Revenue"
+              />
+              <label for="revenue">Revenue (In $) </label>
+            </div>
+            <div
+              *ngIf="
+                userForm.get('revenue')?.invalid &&
+                userForm?.get('revenue')?.touched &&
+                userForm.get('revenue')?.hasError('min')
+              "
+              class="text-danger"
+            >
+              Revenue should be more than 0
+            </div>
+          </div>
+
+          <div class="col-md-2 mt-3">
+            <div class="form-floating">
+              <input
+                type="number"
+                class="form-control"
+                id="budget"
+                formControlName="budget"
+                placeholder="budget"
+              />
+              <label for="budget">Budget (In $) </label>
+            </div>
+            <div
+              *ngIf="
+                userForm.get('budget')?.invalid &&
+                userForm?.get('budget')?.touched &&
+                userForm.get('budget')?.hasError('min')
+              "
+              class="text-danger"
+            >
+              Budget should be more than 0
+            </div>
+          </div>
+
+          <div class="col-md-4 mt-3">
+            <div class="form-floating">
+              <input
+                type="number"
+                class="form-control"
+                id="duration"
+                formControlName="duration"
+                placeholder="duration"
+              />
+              <label for="duration"
+                >Duration (In Mins)
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+            <div
+              *ngIf="
+                userForm.get('duration')?.invalid &&
+                userForm?.get('duration')?.touched
+              "
+              class="text-danger"
+            >
+              <span *ngIf="userForm.get('duration')?.hasError('required')"
+                >Duration is required</span
+              >
+              <span *ngIf="userForm.get('duration')?.hasError('min')"
+                >Duration should be more than 1</span
+              >
+            </div>
+          </div>
+
+          <div class="col-md-4 mt-3">
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="writer"
+                formControlName="writer"
+                placeholder="writer"
+              />
+              <label for="writer">Writer </label>
+            </div>
+          </div>
+
+          <div class="col-md-4 mt-3">
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="director"
+                formControlName="director"
+                placeholder="director"
+              />
+              <label for="director">Director </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="d-flex justify-content-center my-3">
+    <button class="btn btn-purple-fill" (click)="toggleEdit()">
+      {{ editButtonText }}
+    </button>
+
+    <button *ngIf="isEditing" class="ms-3 btn btn-warning" (click)="updateMovie()">
+      Update
+    </button>
+
+    <button *ngIf="!isEditing" class="ms-3 btn btn-danger" (click)="openDeleteModal()">
+      Delete
+    </button>
+  </div>
+</div>

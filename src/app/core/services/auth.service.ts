@@ -7,7 +7,7 @@ import { firstValueFrom, map } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly databaseUrl = 'https://localhost:7048/api/User';
+  private readonly databaseUrl = 'https://localhost:7048/MovieInfo/User';
   constructor(private http: HttpClient, private router: Router) {}
 
   registerNewUser(formData: any) {
@@ -53,11 +53,13 @@ export class AuthService {
 
     if (data.isSuccess == true) {
       let jwt = data.result.token;
+      let userProfileUrl = data.result.profileUrl;
       let firstName = data.result.loggedInUser.firstName;
       let lastName = data.result.loggedInUser.lastName;
       let userRole = data.result.loggedInUser.roleId;
       localStorage.setItem('userToken', jwt);
       localStorage.setItem('userRole', userRole);
+      localStorage.setItem('userProfileUrl', userProfileUrl);
       localStorage.setItem('userFullName', `${firstName} ${lastName}`);
       return true;
     } else {

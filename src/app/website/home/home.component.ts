@@ -5,6 +5,7 @@ import { MovieTileComponent } from '../../shared/components/movie-tile/movie-til
 import { Movie } from '../../shared/models/movie.model';
 import { Router } from '@angular/router';
 import { ShimmerListComponent } from '../../shimmer-list/shimmer-list.component';
+import { Genre } from '../../shared/models/genre.model';
 
 @Injectable()
 @Component({
@@ -19,7 +20,7 @@ export class HomeComponent implements OnInit {
   categoryThreeMovies: Movie[] = [];
   categoryOneMovies: Movie[] = [];
   categoryTwoMovies: Movie[] = [];
-  genreList: any[] = [];
+  genreList: Genre[] = [];
   homePageGenreList: string[] = ['Comedy', 'Action', 'Thriller'];
 
   constructor(
@@ -31,34 +32,33 @@ export class HomeComponent implements OnInit {
     this.fetchData();
   }
 
-  fetchData() {
+  async fetchData() {
     this.movieService
       .fetchMovieByCategory('trending', 1)
       .subscribe((data: any) => {
-        this.trendingMovies = data.data;
+        debugger;
+        this.trendingMovies = data.result.data;
       });
 
     this.movieService
       .fetchMovieByCategory(this.homePageGenreList[0], 1)
       .subscribe((data) => {
-        this.categoryOneMovies = data.data;
+        this.categoryOneMovies = data.result.data;
       });
 
     this.movieService
       .fetchMovieByCategory(this.homePageGenreList[1], 1)
       .subscribe((data) => {
-        this.categoryTwoMovies = data.data;
+        this.categoryTwoMovies = data.result.data;
       });
 
     this.movieService
       .fetchMovieByCategory(this.homePageGenreList[2], 1)
       .subscribe((data) => {
-        this.categoryThreeMovies = data.data;
+        this.categoryThreeMovies = data.result.data;
       });
 
-    this.movieService.fetchMovieGenres().subscribe((data) => {
-      this.genreList = data;
-    });
+    this.genreList = await this.movieService.getGenreList();
   }
 
   goToCategoryPage(categoryName: string) {

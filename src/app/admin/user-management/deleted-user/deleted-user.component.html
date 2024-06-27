@@ -1,0 +1,58 @@
+<div class="my-3 d-flex justify-content-between">
+  <h4>Deleted Users</h4>
+  
+  <button class="btn btn-info" (click)="goBackToUsers()">
+    <span>Back To Users</span>
+  </button>
+
+</div>
+
+<div class="table-responsive">
+  @if (isLoading) {
+  <app-shimmer-table-body
+    [columnCount]="6"
+    [rowCount]="10"
+  ></app-shimmer-table-body>
+  } @else {
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>UserId</th>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let user of deletedUsersList">
+        <td>{{ user.userId }}</td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.userRole }}</td>
+        <td>
+          <button
+            class="btn btn-outline-success ms-3"
+            (click)="openRestoreUserModal(user.userId)"
+          >
+            Restore
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  }
+</div>
+
+<div *ngIf="deletedUsersList.length !== 0" class="d-flex justify-content-center">
+  <app-pagination-button
+    [currentPage]="currentPageNumber"
+    [itemsPerPage]="currentPageSize"
+    [totalItems]="totalItems"
+    (pageChanged)="onPageChange($event)"
+  ></app-pagination-button>
+</div>

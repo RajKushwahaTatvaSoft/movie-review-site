@@ -22,7 +22,7 @@ export class SearchScreenComponent implements OnInit {
   movieName: string = '';
   isLoading = true;
   currentPageNumber: number = 1;
-  categoryPageSize: number = 12;
+  currentPageSize: number = 12;
   totalItems: number = 12;
   moviesList: any = [];
 
@@ -47,13 +47,13 @@ export class SearchScreenComponent implements OnInit {
       .fetchMovieByName(
         this.movieName,
         this.currentPageNumber,
-        this.categoryPageSize
+        this.currentPageSize
       )
       .subscribe((response: any) => {
         this.isLoading = false;
-        this.moviesList = response.data;
-        this.totalItems = response.totalCount;
-        this.currentPageNumber = response.currentPage;
+        this.moviesList = response.result.data;
+        this.totalItems = response.result.totalCount;
+        this.currentPageNumber = response.result.currentPage;
       });
   }
 
