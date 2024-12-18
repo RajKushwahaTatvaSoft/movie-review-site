@@ -1,0 +1,7 @@
+.search-item:hover {
+  background-color: rgb(236, 236, 236);
+}
+
+.search-item {
+  cursor: pointer;
+}

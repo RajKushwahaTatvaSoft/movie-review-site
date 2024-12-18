@@ -21,20 +21,20 @@
     </div>
 
     <div class="col-md-11" style="overflow: hidden">
-      <div class="row mx-2 mt-3">
+      <div class="row mx-2">
         <div *ngIf="isLoading">
           <app-shimmer-list [itemCount]="12"></app-shimmer-list>
         </div>
 
         @if(!isLoading){
-          <div *ngFor="let movie of moviesList" class="col-md-2 mb-3">
+          <div *ngFor="let movie of moviesList" class="col-md-2 mt-3">
             <app-movie-tile [movieDetail]="movie"></app-movie-tile>
           </div>
           <div *ngIf="moviesList.length === 0">No Results Found</div>
         }
       </div>
 
-      <div *ngIf="moviesList.length !== 0" class="d-flex justify-content-center">
+      <div *ngIf="moviesList.length !== 0" class="d-flex justify-content-center mt-3">
         <app-pagination-button
           [currentPage]="currentPageNumber"
           [itemsPerPage]="categoryPageSize"

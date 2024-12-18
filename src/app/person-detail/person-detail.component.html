@@ -22,9 +22,8 @@
 
   <h4>Played As Actor In :</h4>
   <div class="row">
-    <div class="col-md-2" *ngFor="let castMovie of personCastList">
-        {{castMovie.character}}
-        <app-movie-tile [movieTileData]="castMovie.movieData"></app-movie-tile>
+    <div class="col-md-2 mt-3" *ngFor="let castMovie of personCastList">
+        <app-movie-tile [movieDetail]="castMovie"></app-movie-tile>
     </div>
   </div>
 </div>

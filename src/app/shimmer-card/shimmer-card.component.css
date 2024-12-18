@@ -7,6 +7,7 @@
 .fruite-item .fruite-img {
   overflow: hidden;
   transition: 0.5s;
+  height: 300px;
   border-radius: 10px 10px 0 0;
 }
 

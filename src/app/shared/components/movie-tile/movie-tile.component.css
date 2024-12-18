@@ -11,11 +11,13 @@
  .fruite-item .fruite-img {
     overflow: hidden;
     transition: 0.5s;
+    height: 300px;
     border-radius: 10px 10px 0 0;
+    background-color: #eaeaea;
 }
 
  .fruite-item .fruite-img img {    
-    height: 200px;
+    width: 200px;
     object-fit: cover;
     transition: 0.5s;
 }

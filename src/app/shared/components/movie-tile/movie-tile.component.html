@@ -2,14 +2,18 @@
   class="rounded position-relative fruite-item bg-white"
   (click)="isDeletedMovie ? null : goToMovieDetail(movieDetail.movieId)"
 >
-  <div class="fruite-img border border-secondary border-bottom-0">
+  <div
+    [ngClass]="{ shimmer: !isImageLoaded }"
+    class="fruite-img border border-secondary border-bottom-0 justify-content-center d-flex"
+  >
     <img
       src="{{ movieDetail.posterUrl }}"
-      class="img-fluid w-100 rounded-top img-load-transistion"      
-      onload="this.style.opacity=1"
+      class="img-fluid  img-load-transistion"
+      (load)="isImageLoaded = true;"
+      [ngClass]="{'opacity-full': isImageLoaded}"
       alt="no image"
-      style="object-fit: contain; background-color: #eaeaea"
-      (error)="onImageError(movieDetail.imdbId || '')"
+      style="object-fit: cover; aspect-ratio: 2/3;"
+      (error)="onImageError('')"
     />
   </div>
 
@@ -21,15 +25,24 @@
       >
         {{ movieDetail.title }}
       </p>
-      <p class="h6 ms-auto" *ngIf="movieDetail.duration != null">
+      <p
+        *ngIf="isMovieDetailData(movieDetail) && movieDetail.duration != null"
+        class="h6 ms-auto"
+      >
         {{ movieDetail.duration }} mins
       </p>
+    </div>
+
+    <div *ngIf="isCastMovieTileData(movieDetail)">
+      <span
+        >Played : <b> {{ movieDetail.character }} </b></span
+      >
     </div>
 
     @if(isAdmin){ @if(isDeletedMovie){
     <button
       class="btn btn-outline-success"
-      (click)="openRestoreModal(movieDetail.movieId,$event)"
+      (click)="openRestoreModal(movieDetail.movieId, $event)"
     >
       Restore
     </button>
@@ -50,7 +63,8 @@
         Delete <i class="bi bi-trash3-fill fs-6 ms-1"></i>
       </button>
     </div>
-    } } @else { @if(movieDetail.ratingCount == 0){
+    } } @else { @if(isMovieDetailData(movieDetail)){ @if(movieDetail.ratingCount
+    == 0){
     <div>No reviews yet</div>
     } @else{
 
@@ -71,7 +85,7 @@
       />
       <span class="ms-2">({{ movieDetail.ratingCount }})</span>
     </div>
-    } }
+    } }}
   </div>
 </div>
 

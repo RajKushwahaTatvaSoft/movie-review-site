@@ -75,12 +75,16 @@ export class PersonDetailComponent implements OnInit {
 
 class PersonCast {
   character: string;
-  movieData: MovieTileData;
+  movieId : number;
+  title : string;
+  posterUrl : string;
   castOrder: number;
 
-  constructor(charName: string, castOrder: number, movieData: MovieTileData) {
+  constructor(movieId:number,title:string,posterUrl:string,charName: string, castOrder: number, movieData: MovieTileData) {
     this.character = charName;
     this.castOrder = castOrder;
-    this.movieData = movieData;
+    this.movieId = movieId;
+    this.title = title;
+    this.posterUrl =posterUrl;
   }
 }

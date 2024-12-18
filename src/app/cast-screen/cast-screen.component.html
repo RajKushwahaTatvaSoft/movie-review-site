@@ -1,7 +1,5 @@
 <div class="container-fluid">
-  <form
-  (ngSubmit)="searchActorName()"
-  >
+  <form (ngSubmit)="searchActorName()">
     <div class="d-flex align-items-center mt-3">
       <div>
         <h4>Filters:</h4>
@@ -13,7 +11,11 @@
             type="text"
             name="actorSearchInput"
             class="form-control"
+            autocomplete="off"
             placeholder="Search By Actor Name"
+            (input)="fetchActorSuggestions($event)"
+            (focus)="fetchActorSuggestions($event)"
+            (blur)="isShowActorSearchResults = false"
           />
           <button class="btn btn-purple ms-2" (click)="searchActorName()">
             Search
@@ -22,6 +24,36 @@
       </div>
     </div>
   </form>
+
+  @if(isShowActorSearchResults){
+
+  <div style="position: relative" class="bg-white">
+    <div
+      style="position: absolute; width: 300px; left: 75px; z-index: 1000"
+      class="bg-white shadow rounded overflow-hidden mx-2 my-1"
+    >
+      @if(isSearchLoading){
+      <div class="p-2 search-item d-flex justify-content-center">
+        <div class="loading-animation"></div>
+      </div>
+      } @else { @if(actorSuggestionList.length == 0){
+      <div  class="p-2 search-item"><b>No Results Found</b></div>
+      } @else {
+
+      <div class="p-2 search-item" *ngFor="let actor of actorSuggestionList">
+        <div
+          (click)="goDirectToPerson(actor.personId)"
+          class="d-flex justify-content-between"
+        >
+          <span> {{ actor.personName }}</span>
+          <i class="bi bi-box-arrow-up-right"></i>
+        </div>
+      </div>
+      } }
+    </div>
+  </div>
+
+  }
   <div class="row">
     @if(isLoading){
     <div>

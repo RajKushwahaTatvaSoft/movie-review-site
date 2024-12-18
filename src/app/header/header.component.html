@@ -58,8 +58,8 @@
           name="movieSearchName"
           [(ngModel)]="movieSearchName"
           autocomplete="off"
-          (input)="fetchSuggestions($event)"
           placeholder="Search For Movie"
+          (input)="fetchSuggestions($event)"
           (focus)="fetchSuggestions($event)"
           (blur)="isShowSearchResults = false"
         />

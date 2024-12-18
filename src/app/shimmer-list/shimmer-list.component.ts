@@ -12,6 +12,7 @@ import { ShimmerCardComponent } from '../shimmer-card/shimmer-card.component';
 })
 export class ShimmerListComponent {
   @Input() itemCount: number = 3; // Default to 3 shimmer cards
+  @Input() listForContext: 'movietile' | 'reviewtile' = 'movietile';
   shimmerItems: string[] = [];
 
   constructor(private shimmerService: ShimmerService) {}

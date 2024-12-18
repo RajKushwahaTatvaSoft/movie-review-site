@@ -12,10 +12,12 @@
     overflow: hidden;
     transition: 0.5s;
     border-radius: 10px 10px 0 0;
+    background-color: #eaeaea;
+    height: 300px;
 }
 
  .fruite-item .fruite-img img {    
-    height: 200px;
+    width: 200px;
     object-fit: cover;
     transition: 0.5s;
 }

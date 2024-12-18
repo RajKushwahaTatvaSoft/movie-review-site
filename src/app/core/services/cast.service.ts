@@ -30,6 +30,17 @@ export class CastService {
     return this.http.post<any>(url, castList);
   }
 
+  fetchCastSuggestions(searchInput:string){
+    
+    const params = new HttpParams()
+      .set('searchActorName',searchInput)
+
+    const url = `${this.castUrl}/FetchSuggestionsForActor`;
+    return this.http.get<any>(url, {
+      params,
+    });
+  }
+
   fetchPaginatedCastList(searchInput:string,pageNumber:number,pageSize:number){
     
     const params = new HttpParams()

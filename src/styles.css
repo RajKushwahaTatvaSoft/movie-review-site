@@ -105,3 +105,43 @@ textarea:focus{
     }
   }
   
+
+  /* loading animation css */
+
+  
+/* HTML: <div class="loader"></div> */
+.loading-animation {
+  width: 25px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 3px solid #f5f5f5;
+  border-right-color: blueviolet;
+  animation: l2 1s infinite linear;
+}
+
+@keyframes l2 {
+  to {
+      transform: rotate(1turn)
+  }
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+      -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+      -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+      transform: rotate(0deg);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
+}

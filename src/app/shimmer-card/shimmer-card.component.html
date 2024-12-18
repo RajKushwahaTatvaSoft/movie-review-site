@@ -1,8 +1,10 @@
+@if(tileContext === 'movietile'){
+
 <div class="rounded fruite-item p-3">
   <div class="fruite-img shimmer">
     <div></div>
   </div>
-  
+
   <div class="rounded-bottom mt-3">
     <div class="d-flex align-items-center justify-content-between">
       <div class="w-50 shimmer" style="height: 20px"></div>
@@ -10,3 +12,18 @@
     </div>
   </div>
 </div>
+
+} @else if(tileContext === 'reviewtile'){
+
+<div class="card p-2">
+  <div class="d-flex">
+    <div class="shimmer rounded" style="width: 70px; height: 70px"></div>
+
+    <div class="w-100 ms-2 d-flex flex-column">
+      <div class="shimmer h-50 w-25"></div>
+      <div class="shimmer h-50 w-100 mt-2"></div>
+    </div>
+  </div>
+</div>
+
+}

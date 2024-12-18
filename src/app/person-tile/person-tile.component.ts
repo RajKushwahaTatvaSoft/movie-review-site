@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class PersonTileComponent{
   @Input() personDetail: Cast = new Cast(0, 0, '', 0);
   imageOpacity = 0;
+  isImageLoaded = false;
 
   constructor(private router: Router) {}
 

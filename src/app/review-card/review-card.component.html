@@ -9,11 +9,8 @@
 <div class="card p-2">
   <div class="d-flex align-items-center">
     <div class="">
-      @if(!isImageLoaded){
-      <!-- <div class=" rounded" [hidden]="isImageLoaded" style="height: 70px; width: 70px"></div> -->
-      }
-
-      <div [ngClass]="{'shimmer': !isImageLoaded}" style=" width: 70px;" class="rounded">
+      
+      <div [ngClass]="{'shimmer': !isImageLoaded}" style=" width: 70px; height: 70px;" class="rounded">
         <img
         src="{{ userRating.userProfileUrl }}"
         alt="/assets/not_found_movie.svg"

@@ -1,24 +1,23 @@
 <div class="container-fluid mt-3">
   @if(isMovieLoading){
-  <div class="shimmer w-100" style="height: 500px"></div>
-
+  <div class="shimmer" style="height: 400px"></div>
   } @else {
 
-  <div class="row">
-    <div class="col-md-2">
+  <div class="d-flex">
+    <div class="">
       <img
         src="{{ movieDetail.posterUrl }}"
-        class="img-fluid"
-        style="object-fit: contain"
+        class=""
+        style="object-fit: contain; aspect-ratio: 2/3;width: 300px;"
         alt="not found"
         (error)="
           movieDetail.posterUrl =
-            'http://localhost:4200/assets/not_found_movie.svg'
+            '/assets/not_found_movie.svg'
         "
       />
     </div>
 
-    <div class="col-md-10">
+    <div class="ms-3 flex-grow-1">
       <div class="row">
         <div class="col-md-6">
           <h4>{{ movieDetail.title }} ({{ movieDetail.releaseDateStr }})</h4>
@@ -155,12 +154,7 @@
   </div>
 
   } @if (isReviewLoading) {
-
-  <div class="row">
-    <div *ngFor="let i of [1, 2, 3, 4]" class="col-md-6 mt-3">
-      <div class="shimmer w-100" style="height: 100px"></div>
-    </div>
-  </div>
+    <app-shimmer-list [listForContext]="'reviewtile'" [itemCount]="6"></app-shimmer-list>
   } @else {
 
   <div class="row">

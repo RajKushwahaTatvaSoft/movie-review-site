@@ -9,6 +9,7 @@ import { PaginationButtonComponent } from '../shared/components/pagination-butto
 import { FormsModule } from '@angular/forms';
 import { Rating } from '../shared/models/rating.model';
 import { error } from 'console';
+import { ShimmerListComponent } from '../shimmer-list/shimmer-list.component';
 
 @Component({
   selector: 'app-movie-detail',
@@ -19,6 +20,7 @@ import { error } from 'console';
     CommonModule,
     PaginationButtonComponent,
     FormsModule,
+    ShimmerListComponent
   ],
   templateUrl: './movie-detail.component.html',
   styleUrl: './movie-detail.component.css',

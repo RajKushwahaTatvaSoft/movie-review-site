@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ShimmerCardComponent implements OnDestroy {
   @Input() shimmerFor: string = '';
+  @Input() tileContext: 'movietile' | 'reviewtile' = 'movietile';
 
   constructor(private shimmerService: ShimmerService) {}
 

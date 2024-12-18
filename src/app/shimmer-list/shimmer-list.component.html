@@ -1,7 +1,16 @@
 <div class="row mx-2">
+  @if(listForContext == 'movietile'){
 
-    <div *ngFor="let item of shimmerItems" class="col-md-2 mt-3">
-        <app-shimmer-card [shimmerFor]="item"></app-shimmer-card>
-    </div>
+  <div *ngFor="let item of shimmerItems" class="col-md-2 mt-3">
+    <app-shimmer-card [shimmerFor]="item"></app-shimmer-card>
+  </div>
 
+  } @else if(listForContext == 'reviewtile') {
+  <div *ngFor="let item of shimmerItems" class="col-md-6 mt-3">
+    <app-shimmer-card
+      [tileContext]="'reviewtile'"
+      [shimmerFor]="item"
+    ></app-shimmer-card>
+  </div>
+  }
 </div>
